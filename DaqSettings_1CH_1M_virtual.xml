@@ -1,0 +1,70 @@
+<!-- Settings generated at 2012-05-04 14:19:03 [LT] by GUI version 2010.0313 -->
+
+<DaqConfiguration>
+	<DaqCard module="VirtualCard">
+		<SampleClockName>PFI2</SampleClockName>
+		<NumChannels>1</NumChannels>
+		<DevName>Dev1</DevName>
+			<Module>VirtualCard</Module>
+		<StartTriggerName>PFI0</StartTriggerName>
+		<SampleClockPolarity>1</SampleClockPolarity>
+		<SampleRate>1000000</SampleRate>
+		<StartTriggerPolarity>0</StartTriggerPolarity>
+	</DaqCard>
+	<GpsClock module="VirtualClock">
+		<Parity>N</Parity>
+		<BaudRate>9600</BaudRate>
+		<ComPortNumber>6</ComPortNumber>
+		<DataBits>8</DataBits>
+		<Module>VirtualClock</Module>
+		<StopBits>1</StopBits>
+	</GpsClock>
+	<StationSettings>
+		<contact_info>JC</contact_info>
+		<hardware_description>Intel i5</hardware_description>
+		<install_date>4/2012</install_date>
+		<adc_type>PCI-6050</adc_type>
+		<station_id>SUC</station_id>
+		<antenna_bearings>None</antenna_bearings>
+		<antenna_description>None</antenna_description>
+		<station_name>ATB0</station_name>
+		<station_description>AWESOME Testbench #0</station_description>
+	</StationSettings>
+	<PostProcessorTree>
+		<PostProcessorSequence>
+			<PostProcessorSequence>
+				<PostProcessor module="MatFileWriter">
+					<adc_channel_number>0</adc_channel_number>
+					<DirectoryRoot>Continuous</DirectoryRoot>
+					<IsSynoptic>0</IsSynoptic>
+					<Duration>60</Duration>
+				</PostProcessor>
+			</PostProcessorSequence>
+			<PostProcessorSequence>
+				<PostProcessor module="Specgram">
+					<remove_hum>1</remove_hum>
+					<adc_channel_number>0</adc_channel_number>
+					<Period>60</Period>
+					<psd>1</psd>
+					<Duration>10</Duration>
+					<DirectoryRoot>Spectrogram</DirectoryRoot>
+				</PostProcessor>
+			</PostProcessorSequence>
+		</PostProcessorSequence>
+	</PostProcessorTree>
+	<TaskManagerSettings>
+		<Task module="Cleanup">
+			<Directory>Continuous</Directory>
+			<Interval>3600</Interval>
+			<EndTime>23:59</EndTime>
+			<DataLifetime>5</DataLifetime>
+			<StartTime>00:00</StartTime>
+		</Task>
+	</TaskManagerSettings>
+	<Schedule>
+		<Entry>
+			<Duration>86400</Duration>
+			<Start>00:00</Start>
+		</Entry>
+	</Schedule>
+</DaqConfiguration>
