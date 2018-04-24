@@ -53,7 +53,8 @@ includes =("matplotlib",
            "Crypto.Cipher.DES3","Crypto.Cipher.AES","Crypto.Cipher.ARC4","Crypto.Cipher.Blowfish",
            "paramiko",
            "scipy.ndimage",
-           "scipy.io.matlab.streams")
+           "scipy.io.matlab.streams",
+           "email")
 
 # Libraries to exclude
 excludes = ('py_readline','setuptools','Traits','_gtkagg', '_agg2',
@@ -68,7 +69,8 @@ excludes = ('py_readline','setuptools','Traits','_gtkagg', '_agg2',
 
 execs = [Executable('main.py'),
 		 Executable('SerialChecker.py'),
-		 Executable('GUI.py', base='Win32GUI')]
+		 Executable('GUI.py', base='Win32GUI'),
+		 Executable('settings_generator.py')]
 
 # execs = [Executable('GUI.py', base='Win32GUI')]
 		 
@@ -136,4 +138,8 @@ with open(os.path.join(build_dir,"main_debug.bat"),'w') as f:
 
 with open(os.path.join(build_dir,"SerialChecker.bat"),'w') as f:
 	f.write('%s --search' % os.path.join('software','SerialChecker.exe'))
+	f.write('\npause\n')
+
+with open(os.path.join(build_dir,"Make_DaqSettings_for_LF.bat"),'w') as f:
+	f.write('%s --c=default_LF_settings.txt --f=DaqSettings.xml\n'%os.path.join('software','settings_generator.exe'))
 	f.write('\npause\n')

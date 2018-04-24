@@ -1,11 +1,11 @@
-<!-- Settings generated at 2018-04-24 01:07:26.144000 [UTC] by settings_generator -->
+<!-- Settings generated at 2018-04-24 03:30:39.416000 [UTC] by settings_generator -->
 
 <DaqConfiguration>
 	<StationSettings>
 		<station_id>XX</station_id>
 		<station_name>site_name</station_name>
 		<IsLF>1</IsLF>
-		<IsResettable>0</IsResettable>
+		<IsResettable>1</IsResettable>
 		<station_description>.</station_description>
 		<hardware_description>LF Receiver</hardware_description>
 		<antenna_bearings>.</antenna_bearings>

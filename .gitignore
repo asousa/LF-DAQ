@@ -6,3 +6,15 @@
 Builds/
 Continuous/
 Spectrogram/
+POST/
+Synoptic/
+
+ssh_Broadband/
+ssh_Latest/
+ssh_Log/
+log/
+
+# Logfiles
+*.log
+Builds - Shortcut.lnk
+Synoptic/XX050101121647_000.mat

@@ -15,14 +15,14 @@ SingleEndedInput=0
 
 #GPS type: M (Motorola) or T (Truetime)
 GPSType=M
-COM_port=3
+COM_port=6
 
 #Data root folder
 DataRootFolder=
 
 #Distinguish Receiver Style
 IsLF=1
-IsResettable=0
+IsResettable=1
 
 #Local Retrieval
 local_retrieval=0
