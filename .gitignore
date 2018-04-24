@@ -1,0 +1,8 @@
+*.pyc
+*.pyo
+*.pyd
+
+# Data directories
+Builds/
+Continuous/
+Spectrogram/
