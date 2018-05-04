@@ -1,11 +1,11 @@
-<!-- Settings generated at 2018-04-24 03:30:39.416000 [UTC] by settings_generator -->
+<!-- Settings generated at 2018-05-04 01:39:06.824000 [UTC] by settings_generator -->
 
 <DaqConfiguration>
 	<StationSettings>
 		<station_id>XX</station_id>
 		<station_name>site_name</station_name>
 		<IsLF>1</IsLF>
-		<IsResettable>1</IsResettable>
+		<IsResettable>0</IsResettable>
 		<station_description>.</station_description>
 		<hardware_description>LF Receiver</hardware_description>
 		<antenna_bearings>.</antenna_bearings>
@@ -21,9 +21,9 @@
 		<SampleClockName>PFI2</SampleClockName>
 		<StartTriggerName>PFI0</StartTriggerName>
 		<SampleClockPolarity>1</SampleClockPolarity>
-		<StartTriggerPolarity>1</StartTriggerPolarity>
+		<StartTriggerPolarity>0</StartTriggerPolarity>
 		<SampleRate>1000000</SampleRate>
-		<DevName>Dev1</DevName>
+		<DevName>Dev3</DevName>
 		<NumChannels>2</NumChannels>
 		<SingleEndedInput>0</SingleEndedInput>
 	</DaqCard>
@@ -32,7 +32,7 @@
 		<Parity>N</Parity>
 		<StopBits>1</StopBits>
 		<BaudRate>9600</BaudRate>
-		<ComPortNumber>6</ComPortNumber>
+		<ComPortNumber>7</ComPortNumber>
 	</GpsClock>
 	<TaskManagerSettings>
 		<Task module="Cleanup">

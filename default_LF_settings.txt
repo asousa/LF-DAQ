@@ -7,22 +7,22 @@ station_name=site_name
 NumChannels=2
 
 #DAQ card
-DevName=Dev1
+DevName=Dev3
 SampleRate=1000000
 SampleClockPolarity=1
-StartTriggerPolarity=1
+StartTriggerPolarity=0
 SingleEndedInput=0
 
 #GPS type: M (Motorola) or T (Truetime)
 GPSType=M
-COM_port=6
+COM_port=7
 
 #Data root folder
 DataRootFolder=
 
 #Distinguish Receiver Style
 IsLF=1
-IsResettable=1
+IsResettable=0
 
 #Local Retrieval
 local_retrieval=0

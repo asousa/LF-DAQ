@@ -84,7 +84,7 @@ class DAQ:
     # Constants
     # =========
     
-    DAQ_QUEUE_SIZE = 60
+    DAQ_QUEUE_SIZE = 3600 # 60  # APS 4.24.2018
     DAQ_LR_TURNOFF_TIME = 1
     DAQ_LR_TURNON_TIME = 1
 

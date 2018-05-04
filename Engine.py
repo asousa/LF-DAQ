@@ -170,7 +170,7 @@ class Engine:
         self.latest_timestamp = None
         
         # DAQ request timeout - default 30s
-        self.eng_timeout = 30
+        self.eng_timeout = 15 # 30
         
         # Timeing variables
         self.cum_lag = 0 #cumulative total of seconds behind realtime
@@ -1445,8 +1445,8 @@ class Engine:
                     
             except IOError:
                 self.logger.exception("Disk IO Error")
-                self.logger.critical("Disk Full!!!! Please clear hard drives space, according to Stanford instructions.")
-                #self.llog.logend(self.latest_timestamp)
+                self.logger.critical("Disk Full!!!! Time to swap hard drives?")
+                #self.llog.logend(self.latest_timestamp) 
                 
                 self.SignalStop()
 
