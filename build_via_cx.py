@@ -120,7 +120,7 @@ for folder in folders_to_copy:
 # Run the default settings generators
 print "Generating default settings files..."
 subprocess.call('python settings_generator.py --c=default_LF_settings.txt --f=DaqSettings.xml')
-subprocess.call('python settings_generator.py --c=default_VLF_settings.txt')
+# subprocess.call('python settings_generator.py --c=default_VLF_settings.txt')
 
 # Copy default settings files:
 subprocess.call('copy default_LF_settings.txt %s\default_LF_settings.txt'%build_dir, shell=True)

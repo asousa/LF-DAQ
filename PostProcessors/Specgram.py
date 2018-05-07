@@ -1076,7 +1076,7 @@ class Specgram:
         self.start_index = None
         self.num_samples = None
 
-        self.queue = Queue(3) 
+        self.queue = Queue(10) # Queue(3)  # APS 5.2018. Attempting to fix "Queue full" errors after ~2 days of running 
                 
         self.asyncSave = Process(target=AsyncSave, args=(self.queue, self.adc_channel_number, NFFT, fmin, fmax, cmin, cmax, plot_psd, f0, remove_hum, Tamp, fc, overwrite_names, quality_jpg, self.logger))
 

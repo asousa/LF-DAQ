@@ -1,9 +1,9 @@
-<!-- Settings generated at 2018-05-04 01:39:06.824000 [UTC] by settings_generator -->
+<!-- Settings generated at 2018-05-07 20:55:48.130000 [UTC] by settings_generator -->
 
 <DaqConfiguration>
 	<StationSettings>
-		<station_id>XX</station_id>
-		<station_name>site_name</station_name>
+		<station_id>R1</station_id>
+		<station_name>Relampago_LF1</station_name>
 		<IsLF>1</IsLF>
 		<IsResettable>0</IsResettable>
 		<station_description>.</station_description>
@@ -23,7 +23,7 @@
 		<SampleClockPolarity>1</SampleClockPolarity>
 		<StartTriggerPolarity>0</StartTriggerPolarity>
 		<SampleRate>1000000</SampleRate>
-		<DevName>Dev3</DevName>
+		<DevName>Dev1</DevName>
 		<NumChannels>2</NumChannels>
 		<SingleEndedInput>0</SingleEndedInput>
 	</DaqCard>
@@ -32,25 +32,25 @@
 		<Parity>N</Parity>
 		<StopBits>1</StopBits>
 		<BaudRate>9600</BaudRate>
-		<ComPortNumber>7</ComPortNumber>
+		<ComPortNumber>5</ComPortNumber>
 	</GpsClock>
 	<TaskManagerSettings>
 		<Task module="Cleanup">
-			<Directory>Continuous</Directory>
+			<Directory>D:\Continuous</Directory>
 			<Interval>3600</Interval>
 			<StartTime>00:00</StartTime>
 			<EndTime>23:59</EndTime>
 			<DataLifetime>5</DataLifetime>
 		</Task>
 		<Task module="Cleanup">
-			<Directory>Synoptic</Directory>
+			<Directory>D:\Synoptic</Directory>
 			<Interval>3600</Interval>
 			<StartTime>00:00</StartTime>
 			<EndTime>23:59</EndTime>
 			<DataLifetime>14</DataLifetime>
 		</Task>
 		<Task module="Cleanup">
-			<Directory>Spectrogram</Directory>
+			<Directory>D:\Spectrogram</Directory>
 			<Interval>3600</Interval>
 			<StartTime>00:00</StartTime>
 			<EndTime>23:59</EndTime>
@@ -65,7 +65,7 @@
 			<Delete>0</Delete>
 			<StartTime>00:00</StartTime>
 			<EndTime>23:59</EndTime>
-			<WriteDirectory>ssh_Log</WriteDirectory>
+			<WriteDirectory>D:\ssh_Log</WriteDirectory>
 		</Task>
 	</TaskManagerSettings>
 	<PostProcessorTree>
@@ -73,26 +73,26 @@
 			<PostProcessorSequence>
 				<PostProcessor module="MatFileWriter">
 					<adc_channel_number>0</adc_channel_number>
-					<DirectoryRoot>Continuous</DirectoryRoot>
+					<DirectoryRoot>D:\Continuous</DirectoryRoot>
 					<IsSynoptic>0</IsSynoptic>
-					<Duration>60</Duration>
+					<Duration>300</Duration>
 				</PostProcessor>
 			</PostProcessorSequence>
 			<PostProcessorSequence>
 				<PostProcessor module="MatFileWriter">
 					<adc_channel_number>0</adc_channel_number>
-					<DirectoryRoot>Synoptic</DirectoryRoot>
+					<DirectoryRoot>D:\Synoptic</DirectoryRoot>
 					<IsSynoptic>1</IsSynoptic>
-					<SynopticPeriod>300</SynopticPeriod>
+					<SynopticPeriod>3600</SynopticPeriod>
 					<Duration>60</Duration>
 				</PostProcessor>
 			</PostProcessorSequence>
 			<PostProcessorSequence>
 				<PostProcessor module="Specgram">
 					<adc_channel_number>0</adc_channel_number>
-					<DirectoryRoot>Spectrogram</DirectoryRoot>
+					<DirectoryRoot>D:\Spectrogram</DirectoryRoot>
 					<Duration>10</Duration>
-					<Period>60</Period>
+					<Period>300</Period>
 					<NFFT>16384</NFFT>
 					<fmax>400</fmax>
 					<cmin>-10</cmin>
@@ -109,26 +109,26 @@
 			<PostProcessorSequence>
 				<PostProcessor module="MatFileWriter">
 					<adc_channel_number>1</adc_channel_number>
-					<DirectoryRoot>Continuous</DirectoryRoot>
+					<DirectoryRoot>D:\Continuous</DirectoryRoot>
 					<IsSynoptic>0</IsSynoptic>
-					<Duration>60</Duration>
+					<Duration>300</Duration>
 				</PostProcessor>
 			</PostProcessorSequence>
 			<PostProcessorSequence>
 				<PostProcessor module="MatFileWriter">
 					<adc_channel_number>1</adc_channel_number>
-					<DirectoryRoot>Synoptic</DirectoryRoot>
+					<DirectoryRoot>D:\Synoptic</DirectoryRoot>
 					<IsSynoptic>1</IsSynoptic>
-					<SynopticPeriod>300</SynopticPeriod>
+					<SynopticPeriod>3600</SynopticPeriod>
 					<Duration>60</Duration>
 				</PostProcessor>
 			</PostProcessorSequence>
 			<PostProcessorSequence>
 				<PostProcessor module="Specgram">
 					<adc_channel_number>1</adc_channel_number>
-					<DirectoryRoot>Spectrogram</DirectoryRoot>
+					<DirectoryRoot>D:\Spectrogram</DirectoryRoot>
 					<Duration>10</Duration>
-					<Period>60</Period>
+					<Period>300</Period>
 					<NFFT>16384</NFFT>
 					<fmax>400</fmax>
 					<cmin>-10</cmin>
@@ -150,12 +150,15 @@
 	</Schedule>
 	<Logger>
 		<LogDir>log/</LogDir>
-		<ErrorEmail>0</ErrorEmail>
+		<ErrorEmail>1</ErrorEmail>
+		<ErrorEmailFrom>cu.lair.fieldsites@gmail.com</ErrorEmailFrom>
+		<ErrorEmailTo>cu.lair.fieldsites@gmail.com</ErrorEmailTo>
+		<ErrorEmailPw>relampagoLF</ErrorEmailPw>
 		<ErrorPost>0</ErrorPost>
 		<LogPostUrl>/field_sites_logs/logging.php</LogPostUrl>
 		<LogPostServer>vlf-engineering.stanford.edu:80</LogPostServer>
 		<ConsoleLevel>TIMESTAMP</ConsoleLevel>
-		<LogFileLevel>WARNING</LogFileLevel>
+		<LogFileLevel>DEBUG</LogFileLevel>
 		<PostLevel>WARNING</PostLevel>
 	</Logger>
 </DaqConfiguration>

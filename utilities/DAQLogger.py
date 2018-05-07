@@ -74,7 +74,13 @@ class DAQLogger():
         
         self.settings['email'] = settings.GetIntElemVal("ErrorEmail",1) 
         print "Error email: ON" if self.settings['email']==1 else "Error email: OFF"
-        
+        if self.settings['email']==1:
+            self.settings['ErrorEmailFrom'] = settings.GetStrElemVal("ErrorEmailFrom","ErrorEmailFrom")
+            self.settings['ErrorEmailTo'] = settings.GetStrElemVal("ErrorEmailTo","ErrorEmailTo")
+            self.settings['ErrorEmailPw'] = settings.GetStrElemVal("ErrorEmailPw","ErrorEmailPw")
+
+            print "Sending log emails from: %s"%self.settings['ErrorEmailFrom']
+            print "Sending log emails to: %s"%self.settings["ErrorEmailTo"]
         self.settings['post'] = settings.GetIntElemVal("ErrorPost",1) 
         print "Error POST: ON" if self.settings['post']==1 else "Error POST: OFF"
         
@@ -227,7 +233,13 @@ def _log_processing(settings, raw_queue):
         footer = '\nMessage sent from: %s (IP: %s)\n\n%s\n%s\n%s\n' % (settings['name'], hostip, dash, footer_msg, dash)
         
         email_formatter = logging.Formatter('%(message)s' + footer)
-        email_handler = EmailHandler(settings['name'],('smtp.gmail.com',587),'stanford.vlf@gmail.com',['vlf-siteowners@lists.stanford.edu'],'PythonDAQ Experienced an Error.',('vlf.fieldsites','simsek77'),(), '%sVLFDAQ.log' % settings['od']) 
+        email_handler = EmailHandler(settings['name'],
+                        ('smtp.gmail.com',587),
+                        settings['ErrorEmailFrom'],
+                        [settings['ErrorEmailTo']],
+                        'PythonDAQ Experienced an Error.',
+                        (settings['ErrorEmailFrom'],settings['ErrorEmailPw']),
+                        (), '%sVLFDAQ.log' % settings['od']) 
         email_handler.setLevel(logging.CRITICAL) # email will always be critical
         email_handler.setFormatter(email_formatter)
         logger.addHandler(email_handler)

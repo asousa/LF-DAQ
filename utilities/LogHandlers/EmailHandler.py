@@ -49,21 +49,21 @@ class EmailHandler(SMTPHandler):
             msg['To'] = ", ".join(self.toaddrs)
             msg['Date'] = formatdate()
             
-            part = MIMEBase('application', "octet-stream")
-            part.set_payload(open(self.logfile, "rb").read())
-            Encoders.encode_base64(part)
-            part.add_header('Content-Disposition', 'attachment; filename="text.txt"')
+            # part = MIMEBase('application', "octet-stream")
+            # part.set_payload(open(self.logfile, "rb").read())
+            # Encoders.encode_base64(part)
+            # part.add_header('Content-Disposition', 'attachment; filename="text.txt"')
 
-            msg.attach(part)
+            # msg.attach(part)
             
-            msg.attach(self.format(record))
+            # msg.attach(self.format(record))
             
-            #msg = self.format(record)
-            #msg = "From: %s\r\nTo: %s\r\nSubject: %s\r\nDate: %s\r\n\r\n%s" % (
-            #                self.fromaddr,
-            #                ",".join(self.toaddrs),
-            #                self.getSubject(record),
-            #                formatdate(), msg)
+            msg = self.format(record)
+            msg = "From: %s\r\nTo: %s\r\nSubject: %s\r\nDate: %s\r\n\r\n%s" % (
+                           self.fromaddr,
+                           ",".join(self.toaddrs),
+                           self.getSubject(record),
+                           formatdate(), msg)
                             
             if self.username:
                 if self.secure is not None:

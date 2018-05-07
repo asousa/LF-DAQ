@@ -2,12 +2,12 @@
 #------
 [Basics]
 #------
-station_id=XX
-station_name=site_name
+station_id=R1
+station_name=Relampago_LF1
 NumChannels=2
 
 #DAQ card
-DevName=Dev3
+DevName=Dev1
 SampleRate=1000000
 SampleClockPolarity=1
 StartTriggerPolarity=0
@@ -15,10 +15,10 @@ SingleEndedInput=0
 
 #GPS type: M (Motorola) or T (Truetime)
 GPSType=M
-COM_port=7
+COM_port=5
 
 #Data root folder
-DataRootFolder=
+DataRootFolder=D:\
 
 #Distinguish Receiver Style
 IsLF=1
@@ -78,9 +78,9 @@ external_drive=E:/
 [BBFileWriters]
 #--------------
 Continuous=1
-ContinuousDuration=60
+ContinuousDuration=300
 Synoptic=1
-SynopticPeriod=300
+SynopticPeriod=3600
 SynopticDuration=60
 Snapshot=0
 
@@ -96,7 +96,7 @@ call_signs=NWC,NPM,NLK,NAA,NML,DHO,JJI
 active=1
 copy_to_external=0
 duration=10
-period=60
+period=300
 NFFT=16384
 fmax=400
 cmin=-10
@@ -127,10 +127,13 @@ gps_sn=.
 [Logger]
 #------
 LogDir=log/
-ErrorEmail=0
+ErrorEmail=1
+ErrorEmailTo=cu.lair.fieldsites@gmail.com
+ErrorEmailFrom=cu.lair.fieldsites@gmail.com
+ErrorEmailPw=relampagoLF
 ErrorPost=0
 LogPostUrl=/field_sites_logs/logging.php
 LogPostServer=vlf-engineering.stanford.edu:80
 ConsoleLevel=TIMESTAMP
-LogFileLevel=WARNING
+LogFileLevel=DEBUG
 PostLevel=WARNING
