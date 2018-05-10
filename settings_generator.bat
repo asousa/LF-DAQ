@@ -1,3 +1,2 @@
-c:\Anaconda2\python settings_generator.py --config DefaultDistributionTools/generate_settings.txt
-
+c:\Users\relampago\Anaconda2\python settings_generator.py --c default_LF_settings.txt --f DaqSettings.xml
 pause

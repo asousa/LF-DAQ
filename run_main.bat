@@ -1,0 +1,1 @@
+c:\Users\relampago\Anaconda2\python main.py --settings DaqSettings.xml --autostart True

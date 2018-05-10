@@ -54,7 +54,8 @@ includes =("matplotlib",
            "paramiko",
            "scipy.ndimage",
            "scipy.io.matlab.streams",
-           "email")
+           "email",
+           "mkl")
 
 # Libraries to exclude
 excludes = ('py_readline','setuptools','Traits','_gtkagg', '_agg2',

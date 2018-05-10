@@ -2,12 +2,12 @@
 #------
 [Basics]
 #------
-station_id=R1
-station_name=Relampago_LF1
+station_id=R3
+station_name=Relampago_LF3
 NumChannels=2
 
 #DAQ card
-DevName=Dev1
+DevName=Dev2
 SampleRate=1000000
 SampleClockPolarity=1
 StartTriggerPolarity=0
@@ -127,7 +127,7 @@ gps_sn=.
 [Logger]
 #------
 LogDir=log/
-ErrorEmail=1
+ErrorEmail=0
 ErrorEmailTo=cu.lair.fieldsites@gmail.com
 ErrorEmailFrom=cu.lair.fieldsites@gmail.com
 ErrorEmailPw=relampagoLF

@@ -1169,6 +1169,7 @@ class Engine:
                         # C2Duo 3GHz, 8GB, Moto GPS on USB, USB DAQ 3ch:   ~.16 < diff < .2
                         
                         tdiff = tdaq - tgps
+                        # tdiff = abs(tdiff) # APS 5.2018
                         #self.logger.debug("tdaq=%s; tgps=%s" % (tdaq, tgps))
                         #self.logger.debug("tdiff: %s" % tdiff)
                         #self.logger.info("tdaq=%s; tgps=%s; tdiff=%s" % (tdaq, tgps, tdiff))
@@ -1183,7 +1184,7 @@ class Engine:
                                 self.logger.warning("tdaq=%s; tgps=%s; tdiff=%s" % (tdaq, tgps, tdiff))
                             
                             if  (td<1200000 and td>150000):
-                        
+#                            if  (td<1200000 and td>50000):   #APS 5.2018
                                 self.CheckDebugFiles()
 
                                 self.lastLat = gpsData[1][1][0]

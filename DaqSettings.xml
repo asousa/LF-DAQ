@@ -1,9 +1,9 @@
-<!-- Settings generated at 2018-05-07 20:55:48.130000 [UTC] by settings_generator -->
+<!-- Settings generated at 2018-05-10 20:57:40.883000 [UTC] by settings_generator -->
 
 <DaqConfiguration>
 	<StationSettings>
-		<station_id>R1</station_id>
-		<station_name>Relampago_LF1</station_name>
+		<station_id>R3</station_id>
+		<station_name>Relampago_LF3</station_name>
 		<IsLF>1</IsLF>
 		<IsResettable>0</IsResettable>
 		<station_description>.</station_description>
@@ -23,7 +23,7 @@
 		<SampleClockPolarity>1</SampleClockPolarity>
 		<StartTriggerPolarity>0</StartTriggerPolarity>
 		<SampleRate>1000000</SampleRate>
-		<DevName>Dev1</DevName>
+		<DevName>Dev2</DevName>
 		<NumChannels>2</NumChannels>
 		<SingleEndedInput>0</SingleEndedInput>
 	</DaqCard>
@@ -150,7 +150,7 @@
 	</Schedule>
 	<Logger>
 		<LogDir>log/</LogDir>
-		<ErrorEmail>1</ErrorEmail>
+		<ErrorEmail>0</ErrorEmail>
 		<ErrorEmailFrom>cu.lair.fieldsites@gmail.com</ErrorEmailFrom>
 		<ErrorEmailTo>cu.lair.fieldsites@gmail.com</ErrorEmailTo>
 		<ErrorEmailPw>relampagoLF</ErrorEmailPw>
