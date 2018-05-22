@@ -45,16 +45,16 @@ class Cleanup(Task):
 
         self.data_lifetime = config.GetDblElemVal('DataLifetime')
         
-        if self.data_lifetime < 1:
-            self.logger.error("Data lifetime invalid (%d). Set to default %d" % (self.data_lifetime, 5))
-            self.data_lifetime = 5      
+        # if self.data_lifetime < 1:
+        #     self.logger.error("Data lifetime invalid (%d). Set to default %d" % (self.data_lifetime, 5))
+        #     self.data_lifetime = 5      
         
         self.interval = config.GetIntElemVal('Interval')
         
         if self.interval < 1:
             self.logger.error("Cleanup interval invalid (%d). Set to default %d" % (self.interval, 3600))
             self.interval = 3600
-        
+
         self.exclude_list = ['.mau']
 
 ###############################################################################
@@ -104,6 +104,7 @@ class Cleanup(Task):
         dt = curr_time - file_mtime
 
         return dt.days*86400 + dt.seconds >= self.data_lifetime*86400
+        # return dt.days*86400 + dt.seconds >= self.data_lifetime*3600  # data_lifetime in hours - 5.2018
 
 
 ###############################################################################

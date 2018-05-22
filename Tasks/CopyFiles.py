@@ -2,6 +2,8 @@
 Copy files to a directory
 """
 import shutil
+import ctypes
+import platform
 
 __all__ = ['CopyFiles']
 
@@ -52,13 +54,22 @@ class CopyFiles(Task):
         self.exclude_list = ['.mau']
 
         #parse the xml file
-        self.writeDirectory = config.GetStrElemVal('WriteDirectory')
-        if not os.path.isdir(self.writeDirectory):
-            try:
-                os.makedirs(self.writeDirectory)
-            except:
-                self.logger.error('Cannot create folder %s for copying--drive may be missing or full' % self.writeDirectory)
-
+        # self.writeDirectory = config.GetStrElemVal('WriteDirectory')
+        # A list of possible write directories:
+        self.writeDirectories = []
+        no_dir_default = 'X3@X-+#@!3blablabla'
+        for ii in ['','0','1','2','3','4','5','6','7','8','9']:
+            writeDirectory = config.GetStrElemVal('WriteDirectory%s'%ii, no_dir_default)
+            if writeDirectory != no_dir_default:
+                if not os.path.isdir(writeDirectory):
+                    try:
+                        os.makedirs(writeDirectory)
+                    except:
+                        self.logger.error('Cannot create folder %s for copying--drive may be missing or full' % writeDirectory)
+                self.writeDirectories.append(writeDirectory)
+        self.logger.info('Available write directories:')
+        for wd in self.writeDirectories:
+            self.logger.info("writeDirectory: %s"%wd)
         self.interval = config.GetIntElemVal('Interval') #seconds
         self.delete_after_copy = config.GetIntElemVal("Delete",0)>0
 
@@ -85,45 +96,55 @@ class CopyFiles(Task):
 ###############################################################################
 
     def DoTask(self):
+        self.logger.info("Doing copy task")
+        for writeDirectory in filter(lambda x: os.path.exists(os.path.splitdrive(x)[0]),self.writeDirectories):
+            self.logger.info("Checking %s"%writeDirectory)
+            # Check disk space at target directory:
+            free_bytes = self.checkDisk(writeDirectory)
+            reqd_bytes = 2*1024*2024*1024  # 2 GB (arbitrary stop point. Could calculate a bit more intelligently)
+            self.logger.info("free bytes = %d, reqd_bytes = %d"%(free_bytes, reqd_bytes))
+            if (free_bytes > reqd_bytes):
+                #check write directory:
+                if not os.path.isdir(writeDirectory):
+                    try:
+                        os.makedirs(writeDirectory)
+                    except:
+                        self.logger.error('Cannot create write directory %s' % writeDirectory)
+                        return
 
-        #check write directory:
-        if not os.path.isdir(self.writeDirectory):
-            try:
-                os.makedirs(self.writeDirectory)
-            except:
-                self.logger.error('Cannot create write directory %s' % self.writeDirectory)
-                return
+                self.CopyFiles(self.filenames, writeDirectory)
 
-        self.CopyFiles(self.filenames)
+                for directory in self.directories:
+                    if not self.running:
+                        break   #don't wait for everything to copy when software called to exit
 
-        for directory in self.directories:
-            if not self.running:
-                break   #don't wait for everything to copy when software called to exit
+                    if not os.path.isdir(directory):
+                        continue
 
-            if not os.path.isdir(directory):
-                continue
+                    #get a list of all files in the data directory
+                    file_list = os.listdir(directory)
 
-            #get a list of all files in the data directory
-            file_list = os.listdir(directory)
+                    #prepend directory
+                    file_list = [os.path.join(directory,fname) for fname in file_list]
 
-            #prepend directory
-            file_list = [os.path.join(directory,fname) for fname in file_list]
+                    #strip out all directories from the list
+                    file_list = filter(lambda x: not os.path.isdir(x), file_list)
 
-            #strip out all directories from the list
-            file_list = filter(lambda x: not os.path.isdir(x), file_list)
+                    #strip out certain extensions
+                    for extension in self.exclude_list:
+                        file_list = filter(lambda x: not x.endswith(extension), file_list)
 
-            #strip out certain extensions
-            for extension in self.exclude_list:
-                file_list = filter(lambda x: not x.endswith(extension), file_list)
+                    try:
+                        self.CopyFiles(file_list, writeDirectory)
+                        self.logger.info("Finished copying files.")
+                    except:
+                        # Would be nice to differentiate between different file errors (ie disc full, etc) and handle accordingly
+                        continue
+                break # Success -- don't copy to any other drives
 
-            try:
-                self.CopyFiles(file_list)
-                self.logger.info("Finished copying files.")
-            except:
-                # Would be nice to differentiate between different file errors (ie disc full, etc) and handle accordingly
-                continue
 
-    def CopyFiles(self,file_list):
+    def CopyFiles(self,file_list, writeDirectory):
+        # Passing the write directory as a parameter, since it may change in doTask based on disk availability
         for filename in file_list:
             if not self.running:
                 break   #don't wait for everything to copy when software called to exit
@@ -143,7 +164,7 @@ class CopyFiles(Task):
                         new_filename = os.path.join(self.writeDirectory,tail)
                     """
                     ### changed 4/21/13 by JCC to make copy destination directory flat
-                    new_filename = os.path.join(self.writeDirectory,tail)
+                    new_filename = os.path.join(writeDirectory,tail)
 
                     shutil.copyfile(filename,new_filename)
                     self.logger.debug("Copied %s to %s." % (filename,new_filename))
@@ -156,6 +177,27 @@ class CopyFiles(Task):
                 self.logger.exception('Filename: %s' % filename)
                 #break   #usually write drive dne; exit out of loop
                 raise
+
+    
+    def checkDisk(self, fname):
+    
+        dname = os.path.dirname(fname)
+        """ 
+        Return folder/drive free space (in bytes)
+        """
+        if os.name == 'nt':
+            free_bytes = ctypes.c_ulonglong(0)
+            ctypes.windll.kernel32.GetDiskFreeSpaceExW(ctypes.c_wchar_p(dname), None, None, ctypes.pointer(free_bytes))
+            return free_bytes.value
+        else:
+              
+            s = os.statvfs(dname)
+            
+            # f_bsize = system block size
+            # f_frsize = fundamental system block size (some recipies uses this)
+            # f_bavail = blocks available
+            
+            return s.f_bsize * s.f_bavail
 
 
 ###############################################################################

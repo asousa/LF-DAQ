@@ -236,7 +236,9 @@ class MakeSettingsFile:
                 clean.add_entry(_xml('Interval',3600))
                 clean.add_entry(_xml('StartTime','00:00'))
                 clean.add_entry(_xml('EndTime','23:59'))
+                # clean.add_entry(_xml('DataLifetime',str(24*int(self.config.get('Cleanup','cleanup_synoptic_days')))))
                 clean.add_entry(_xml('DataLifetime',self.config.get('Cleanup','cleanup_synoptic_days')))
+
                 tasks.add_entry(clean)
 
             if self.config.get('Spectrogram','active')=='1':
@@ -261,60 +263,79 @@ class MakeSettingsFile:
 
         #copy to external
         if self.config.get('Copy_To_External','active')=='1':
-            driveroot = self.config.get('Copy_To_External','external_drive')
-            if not os.path.isdir(driveroot):
-                print 'WARNING: Save Folder %s does not exist' % driveroot
+            # List of drive roots to copy to
+            driveroots = self.config.get('Copy_To_External','external_drive').split(',')
+            for driveroot in driveroots:
+                if not os.path.isdir(driveroot):
+                    print 'WARNING: Save Folder %s does not exist' % driveroot
+
             if self.config.get('BBFileWriters','Continuous')=='1':
                 copy = _xml('Task','','module="CopyFiles"')
 
-                if not os.path.isdir('ContinuousToKeep'):
-                    os.mkdir('ContinuousToKeep')
+                # if not os.path.isdir('ContinuousToKeep'):
+                #     os.mkdir('ContinuousToKeep')
 
-                copy.add_entry(_xml('Directory',os.path.join(DataRootFolder,'ContinuousToKeep')))
-                copy.add_entry(_xml('Interval',3600))
+                # copy.add_entry(_xml('Directory',os.path.join(DataRootFolder,'ContinuousToKeep')))
+                # copy.add_entry(_xml('Interval',3600))
+                # copy.add_entry(_xml('Delete',1))
+                # copy.add_entry(_xml('StartTime','00:00'))
+                # copy.add_entry(_xml('EndTime','23:59'))
+                # for ii, driveroot in enumerate(driveroots):
+                #     copy.add_entry(_xml('WriteDirectory%d'%ii,os.path.join(driveroot,'Continuous')))
+                # tasks.add_entry(copy)
+
+                copy = _xml('Task','','module="CopyFiles"')
+                # Copy from the "continous" directory as well. This will override the 'cleanup' task.
+                copy.add_entry(_xml('Directory',os.path.join(DataRootFolder,'Continuous')))
+                copy.add_entry(_xml('Interval',1800))
                 copy.add_entry(_xml('Delete',1))
                 copy.add_entry(_xml('StartTime','00:00'))
                 copy.add_entry(_xml('EndTime','23:59'))
-                copy.add_entry(_xml('WriteDirectory',os.path.join(driveroot,'Continuous')))
+                for ii, driveroot in enumerate(driveroots):
+                    copy.add_entry(_xml('WriteDirectory%d'%ii,os.path.join(driveroot,'Continuous')))
                 tasks.add_entry(copy)
+
 
             if self.config.get('BBFileWriters','Synoptic')=='1':
                 copy = _xml('Task','','module="CopyFiles"')
                 copy.add_entry(_xml('Directory',os.path.join(DataRootFolder,'Synoptic')))
-                copy.add_entry(_xml('Interval',3600))
+                copy.add_entry(_xml('Interval',1800))
                 copy.add_entry(_xml('Delete',1))
                 copy.add_entry(_xml('StartTime','00:00'))
                 copy.add_entry(_xml('EndTime','23:59'))
-                copy.add_entry(_xml('WriteDirectory',os.path.join(driveroot,'Synoptic')))
+                for ii, driveroot in enumerate(driveroots):
+                    copy.add_entry(_xml('WriteDirectory%d'%ii,os.path.join(driveroot,'Synoptic')))
                 tasks.add_entry(copy)
 
             if (self.config.get('Spectrogram','active')=='1') and \
                 (self.config.get('Spectrogram','copy_to_external')=='1'):
                 copy = _xml('Task','','module="CopyFiles"')
                 copy.add_entry(_xml('Directory',os.path.join(DataRootFolder,'Spectrogram')))
-                copy.add_entry(_xml('Interval',3600))
+                copy.add_entry(_xml('Interval',1800))
                 copy.add_entry(_xml('Delete',1))
                 copy.add_entry(_xml('StartTime','00:00'))
                 copy.add_entry(_xml('EndTime','23:59'))
-                copy.add_entry(_xml('WriteDirectory',os.path.join(driveroot,'Spectrogram')))
+                for ii, driveroot in enumerate(driveroots):
+                    copy.add_entry(_xml('WriteDirectory%d'%ii,os.path.join(driveroot,'Spectrogram')))
                 tasks.add_entry(copy)
 
             if (self.config.get('Narrowband','active')=='1') and \
                 ((self.config.get('SSH','ssh_Narrowband')=='0') or (self.config.get('SSH','KeepLocalCopyNB')=='1')):
                 copy = _xml('Task','','module="CopyFiles"')
                 copy.add_entry(_xml('Directory',os.path.join(DataRootFolder,'Narrowband')))
-                copy.add_entry(_xml('Interval',3600))
+                copy.add_entry(_xml('Interval',1800))
                 copy.add_entry(_xml('Delete',1))
                 copy.add_entry(_xml('StartTime','00:00'))
                 copy.add_entry(_xml('EndTime','23:59'))
-                copy.add_entry(_xml('WriteDirectory',os.path.join(driveroot,'Narrowband')))
+                for ii, driveroot in enumerate(driveroots):
+                    copy.add_entry(_xml('WriteDirectory%d'%ii,os.path.join(driveroot,'Narrowband')))
                 tasks.add_entry(copy)
 
 
         #copy settings/log files:
         copy = _xml('Task','','module="CopyFiles"')
         copy.add_entry(_xml('Filename','DaqSettings.xml'))
-        copy.add_entry(_xml('Filename1','default_LF_settings.txt'))
+        copy.add_entry(_xml('Filename0','default_LF_settings.txt'))
         copy.add_entry(_xml('Filename1','default_VLF_settings.txt'))
         #copy.add_entry(_xml('Filename2','Engine.log'))
         #copy.add_entry(_xml('Filename3','TaskManager.log'))

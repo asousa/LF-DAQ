@@ -1,4 +1,4 @@
-<!-- Settings generated at 2018-05-10 20:57:40.883000 [UTC] by settings_generator -->
+<!-- Settings generated at 2018-05-16 20:46:40.672000 [UTC] by settings_generator -->
 
 <DaqConfiguration>
 	<StationSettings>
@@ -23,7 +23,7 @@
 		<SampleClockPolarity>1</SampleClockPolarity>
 		<StartTriggerPolarity>0</StartTriggerPolarity>
 		<SampleRate>1000000</SampleRate>
-		<DevName>Dev2</DevName>
+		<DevName>Dev1</DevName>
 		<NumChannels>2</NumChannels>
 		<SingleEndedInput>0</SingleEndedInput>
 	</DaqCard>
@@ -32,40 +32,46 @@
 		<Parity>N</Parity>
 		<StopBits>1</StopBits>
 		<BaudRate>9600</BaudRate>
-		<ComPortNumber>5</ComPortNumber>
+		<ComPortNumber>7</ComPortNumber>
 	</GpsClock>
 	<TaskManagerSettings>
-		<Task module="Cleanup">
-			<Directory>D:\Continuous</Directory>
-			<Interval>3600</Interval>
+		<Task module="CopyFiles">
+			<Directory>Continuous</Directory>
+			<Interval>1800</Interval>
+			<Delete>1</Delete>
 			<StartTime>00:00</StartTime>
 			<EndTime>23:59</EndTime>
-			<DataLifetime>5</DataLifetime>
+			<WriteDirectory0>D:\Continuous</WriteDirectory0>
+			<WriteDirectory1>E:\Continuous</WriteDirectory1>
 		</Task>
-		<Task module="Cleanup">
-			<Directory>D:\Synoptic</Directory>
-			<Interval>3600</Interval>
+		<Task module="CopyFiles">
+			<Directory>Synoptic</Directory>
+			<Interval>1800</Interval>
+			<Delete>1</Delete>
 			<StartTime>00:00</StartTime>
 			<EndTime>23:59</EndTime>
-			<DataLifetime>14</DataLifetime>
+			<WriteDirectory0>D:\Synoptic</WriteDirectory0>
+			<WriteDirectory1>E:\Synoptic</WriteDirectory1>
 		</Task>
-		<Task module="Cleanup">
-			<Directory>D:\Spectrogram</Directory>
-			<Interval>3600</Interval>
+		<Task module="CopyFiles">
+			<Directory>Spectrogram</Directory>
+			<Interval>1800</Interval>
+			<Delete>1</Delete>
 			<StartTime>00:00</StartTime>
 			<EndTime>23:59</EndTime>
-			<DataLifetime>5</DataLifetime>
+			<WriteDirectory0>D:\Spectrogram</WriteDirectory0>
+			<WriteDirectory1>E:\Spectrogram</WriteDirectory1>
 		</Task>
 		<Task module="CopyFiles">
 			<Filename>DaqSettings.xml</Filename>
-			<Filename1>default_LF_settings.txt</Filename1>
+			<Filename0>default_LF_settings.txt</Filename0>
 			<Filename1>default_VLF_settings.txt</Filename1>
 			<Filename4>log/VLFDAQ.log</Filename4>
 			<Interval>43200</Interval>
 			<Delete>0</Delete>
 			<StartTime>00:00</StartTime>
 			<EndTime>23:59</EndTime>
-			<WriteDirectory>D:\ssh_Log</WriteDirectory>
+			<WriteDirectory>ssh_Log</WriteDirectory>
 		</Task>
 	</TaskManagerSettings>
 	<PostProcessorTree>
@@ -73,7 +79,7 @@
 			<PostProcessorSequence>
 				<PostProcessor module="MatFileWriter">
 					<adc_channel_number>0</adc_channel_number>
-					<DirectoryRoot>D:\Continuous</DirectoryRoot>
+					<DirectoryRoot>Continuous</DirectoryRoot>
 					<IsSynoptic>0</IsSynoptic>
 					<Duration>300</Duration>
 				</PostProcessor>
@@ -81,7 +87,7 @@
 			<PostProcessorSequence>
 				<PostProcessor module="MatFileWriter">
 					<adc_channel_number>0</adc_channel_number>
-					<DirectoryRoot>D:\Synoptic</DirectoryRoot>
+					<DirectoryRoot>Synoptic</DirectoryRoot>
 					<IsSynoptic>1</IsSynoptic>
 					<SynopticPeriod>3600</SynopticPeriod>
 					<Duration>60</Duration>
@@ -90,7 +96,7 @@
 			<PostProcessorSequence>
 				<PostProcessor module="Specgram">
 					<adc_channel_number>0</adc_channel_number>
-					<DirectoryRoot>D:\Spectrogram</DirectoryRoot>
+					<DirectoryRoot>Spectrogram</DirectoryRoot>
 					<Duration>10</Duration>
 					<Period>300</Period>
 					<NFFT>16384</NFFT>
@@ -109,7 +115,7 @@
 			<PostProcessorSequence>
 				<PostProcessor module="MatFileWriter">
 					<adc_channel_number>1</adc_channel_number>
-					<DirectoryRoot>D:\Continuous</DirectoryRoot>
+					<DirectoryRoot>Continuous</DirectoryRoot>
 					<IsSynoptic>0</IsSynoptic>
 					<Duration>300</Duration>
 				</PostProcessor>
@@ -117,7 +123,7 @@
 			<PostProcessorSequence>
 				<PostProcessor module="MatFileWriter">
 					<adc_channel_number>1</adc_channel_number>
-					<DirectoryRoot>D:\Synoptic</DirectoryRoot>
+					<DirectoryRoot>Synoptic</DirectoryRoot>
 					<IsSynoptic>1</IsSynoptic>
 					<SynopticPeriod>3600</SynopticPeriod>
 					<Duration>60</Duration>
@@ -126,7 +132,7 @@
 			<PostProcessorSequence>
 				<PostProcessor module="Specgram">
 					<adc_channel_number>1</adc_channel_number>
-					<DirectoryRoot>D:\Spectrogram</DirectoryRoot>
+					<DirectoryRoot>Spectrogram</DirectoryRoot>
 					<Duration>10</Duration>
 					<Period>300</Period>
 					<NFFT>16384</NFFT>
