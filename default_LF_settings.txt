@@ -78,7 +78,7 @@ external_drive=D:\,E:\
 #--------------
 Continuous=1
 ContinuousDuration=300
-Synoptic=1
+Synoptic=0
 SynopticPeriod=3600
 SynopticDuration=60
 Snapshot=0
@@ -95,7 +95,7 @@ call_signs=NWC,NPM,NLK,NAA,NML,DHO,JJI
 active=1
 copy_to_external=1
 duration=10
-period=300
+period=1800
 NFFT=16384
 fmax=400
 cmin=-10

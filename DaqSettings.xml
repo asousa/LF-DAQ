@@ -1,4 +1,4 @@
-<!-- Settings generated at 2018-05-16 20:46:40.672000 [UTC] by settings_generator -->
+<!-- Settings generated at 2018-05-25 18:20:41.512000 [UTC] by settings_generator -->
 
 <DaqConfiguration>
 	<StationSettings>
@@ -45,15 +45,6 @@
 			<WriteDirectory1>E:\Continuous</WriteDirectory1>
 		</Task>
 		<Task module="CopyFiles">
-			<Directory>Synoptic</Directory>
-			<Interval>1800</Interval>
-			<Delete>1</Delete>
-			<StartTime>00:00</StartTime>
-			<EndTime>23:59</EndTime>
-			<WriteDirectory0>D:\Synoptic</WriteDirectory0>
-			<WriteDirectory1>E:\Synoptic</WriteDirectory1>
-		</Task>
-		<Task module="CopyFiles">
 			<Directory>Spectrogram</Directory>
 			<Interval>1800</Interval>
 			<Delete>1</Delete>
@@ -85,20 +76,11 @@
 				</PostProcessor>
 			</PostProcessorSequence>
 			<PostProcessorSequence>
-				<PostProcessor module="MatFileWriter">
-					<adc_channel_number>0</adc_channel_number>
-					<DirectoryRoot>Synoptic</DirectoryRoot>
-					<IsSynoptic>1</IsSynoptic>
-					<SynopticPeriod>3600</SynopticPeriod>
-					<Duration>60</Duration>
-				</PostProcessor>
-			</PostProcessorSequence>
-			<PostProcessorSequence>
 				<PostProcessor module="Specgram">
 					<adc_channel_number>0</adc_channel_number>
 					<DirectoryRoot>Spectrogram</DirectoryRoot>
 					<Duration>10</Duration>
-					<Period>300</Period>
+					<Period>1800</Period>
 					<NFFT>16384</NFFT>
 					<fmax>400</fmax>
 					<cmin>-10</cmin>
@@ -121,20 +103,11 @@
 				</PostProcessor>
 			</PostProcessorSequence>
 			<PostProcessorSequence>
-				<PostProcessor module="MatFileWriter">
-					<adc_channel_number>1</adc_channel_number>
-					<DirectoryRoot>Synoptic</DirectoryRoot>
-					<IsSynoptic>1</IsSynoptic>
-					<SynopticPeriod>3600</SynopticPeriod>
-					<Duration>60</Duration>
-				</PostProcessor>
-			</PostProcessorSequence>
-			<PostProcessorSequence>
 				<PostProcessor module="Specgram">
 					<adc_channel_number>1</adc_channel_number>
 					<DirectoryRoot>Spectrogram</DirectoryRoot>
 					<Duration>10</Duration>
-					<Period>300</Period>
+					<Period>1800</Period>
 					<NFFT>16384</NFFT>
 					<fmax>400</fmax>
 					<cmin>-10</cmin>
