@@ -443,7 +443,7 @@ def calibrate_2ch(file1, file2):
     outdict['NoiseResponseNS'] = NoiseResponseNS
     outdict['NoiseResponseEW'] = NoiseResponseEW
     outdict['ResponseRatio'] = responseRatio
-    outdict['AntennaParams'] = 'Type: %s, AWG: %d, Baseline: %g cm, Turns: %d'%(geom, ant_AWG, ant_baseline, Na)
+    outdict['AntennaParams'] = np.array('Type: %s, AWG: %d, Baseline: %g cm, Turns: %d'%(geom, ant_AWG, ant_baseline, Na))
 
     return outdict
     
@@ -459,7 +459,16 @@ if __name__ == '__main__':
         - Output some plots
         - Output CalibrationVariables.mat, so your spectrograms will be scaled appropriately!
     '''
-    
+    # import Tkinter, tkFileDialog
+
+    # print "Please open the Matlab file containing the calibration tone:"
+
+    # root = Tkinter.Tk()
+    # root.withdraw()
+    # file_path = tkFileDialog.askopenfilename()
+
+    # file_name = file_path.split()[1]
+    # file_path = file_path.split()[0]
 
     # Load the input files:
     file_path = '.'
@@ -474,7 +483,7 @@ if __name__ == '__main__':
     caldict = calibrate_2ch(file1, file2)
 
     # Save it:
-    savemat('CalibrationVariables',caldict)
+    savemat('CalibrationVariables',caldict, format='4')
 
     # Plot it!
     fig, ax = plot_frequency_response(caldict['FrequencyResponseNS'], caldict['FrequencyResponseEW'])
@@ -483,10 +492,10 @@ if __name__ == '__main__':
     fig, ax = plot_noise_floor(caldict['NoiseResponseNS'],caldict['NoiseResponseEW'])
     fig.savefig(os.path.join(file_path, 'NoiseResponse.pdf'))
 
-    plot_calibration_number(caldict['CalibrationNumberNS'], caldict['CalibrationNumberEW'])
+    fig, ax = plot_calibration_number(caldict['CalibrationNumberNS'], caldict['CalibrationNumberEW'])
     fig.savefig(os.path.join(file_path, 'CalibrationNumber.pdf'))
 
-    plot_response_ratio(caldict['FrequencyResponseNS'][:,0], caldict['ResponseRatio'])
+    fig, ax = plot_response_ratio(caldict['FrequencyResponseNS'][:,0], caldict['ResponseRatio'])
     fig.savefig(os.path.join(file_path, 'ResponseRatio.pdf'))
 
     raw_input('press any key to exit')

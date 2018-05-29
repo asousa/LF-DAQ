@@ -1,4 +1,4 @@
-<!-- Settings generated at 2018-05-25 18:20:41.512000 [UTC] by settings_generator -->
+<!-- Settings generated at 2018-05-29 01:24:06.773000 [UTC] by settings_generator -->
 
 <DaqConfiguration>
 	<StationSettings>
@@ -80,11 +80,11 @@
 					<adc_channel_number>0</adc_channel_number>
 					<DirectoryRoot>Spectrogram</DirectoryRoot>
 					<Duration>10</Duration>
-					<Period>1800</Period>
+					<Period>60</Period>
 					<NFFT>16384</NFFT>
 					<fmax>400</fmax>
-					<cmin>-10</cmin>
-					<cmax>50</cmax>
+					<cmin>-50</cmin>
+					<cmax>10</cmax>
 					<remove_hum>0</remove_hum>
 					<f0>60</f0>
 					<hum_fc>4000</hum_fc>
@@ -107,11 +107,11 @@
 					<adc_channel_number>1</adc_channel_number>
 					<DirectoryRoot>Spectrogram</DirectoryRoot>
 					<Duration>10</Duration>
-					<Period>1800</Period>
+					<Period>60</Period>
 					<NFFT>16384</NFFT>
 					<fmax>400</fmax>
-					<cmin>-10</cmin>
-					<cmax>50</cmax>
+					<cmin>-50</cmin>
+					<cmax>10</cmax>
 					<remove_hum>0</remove_hum>
 					<f0>60</f0>
 					<hum_fc>4000</hum_fc>

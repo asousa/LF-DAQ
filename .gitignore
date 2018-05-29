@@ -25,3 +25,8 @@ __ver__.py
 *.pyc
 __ver__.py
 *.mat
+*.pyc
+.ipynb_checkpoints/Untitled-checkpoint.ipynb
+*.pdf
+Untitled.ipynb
+*.pyc

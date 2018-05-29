@@ -133,6 +133,9 @@ class loadMATdata:
         elif MOPT==11:   #matrix of characters
             precision = np.float32;
             bytesPerEntry = 4
+        elif MOPT==51:   # Matrix of characters
+        	precision = np.uint8;
+        	bytesPerEntry = 1
         else:
             raise TypeError('unrecognized format: %d' % MOPT)
         return (precision, bytesPerEntry)
