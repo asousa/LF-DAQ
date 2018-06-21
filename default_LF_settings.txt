@@ -95,7 +95,7 @@ call_signs=NWC,NPM,NLK,NAA,NML,DHO,JJI
 active=1
 copy_to_external=1
 duration=10
-period=60
+period=1800
 NFFT=16384
 fmax=400
 cmin=-50
@@ -110,11 +110,11 @@ quality=75
 #---------------
 [Station_Notes]
 #---------------
-#Filler stuff (not required)
-station_description=.
+# (Please actually put this in)
+station_description=RELAMPAGO LF Receiver
 hardware_description=LF Receiver
 antenna_bearings=.
-antenna_description=.
+antenna_description=T2 triangle, 13 turns
 install_date=.
 contact_info=.
 adc_type=.
@@ -134,5 +134,17 @@ ErrorPost=0
 LogPostUrl=/field_sites_logs/logging.php
 LogPostServer=vlf-engineering.stanford.edu:80
 ConsoleLevel=TIMESTAMP
-LogFileLevel=DEBUG
+LogFileLevel=TIMESTAMP
 PostLevel=WARNING
+  
+
+#-----------------
+[Copy_To_Dropbox]
+#-----------------
+# This module copies the log file and config file to dropbox_dir
+# Also sets the spectrogram function to write "LatestNS.jpg, LatestEW.jpg"
+# into the dropbox_dir.
+# Runs every copy_period seconds.
+active=1
+dropbox_dir=C:\Users\relampago\Dropbox\RELAMPAGO Logs\LF 1
+copy_period=60

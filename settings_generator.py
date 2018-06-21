@@ -348,6 +348,21 @@ class MakeSettingsFile:
         copy.add_entry(_xml('WriteDirectory',os.path.join(DataRootFolder,'ssh_Log')))
         tasks.add_entry(copy)
 
+        
+        #copy log files to Dropbox
+        if self.config.get('Copy_To_Dropbox','active')=='1':
+            copy = _xml('Task','','module="CopyFiles"')
+            copy.add_entry(_xml('Filename','log/VLFDAQ.log'))
+            copy.add_entry(_xml('Filename1','DaqSettings.xml'))
+            copy.add_entry(_xml('Filename2','default_LF_settings.txt'))
+        
+            copy.add_entry(_xml('Interval',self.config.get('Copy_To_Dropbox','copy_period')))
+            copy.add_entry(_xml('Delete',0))
+            copy.add_entry(_xml('StartTime','00:00'))
+            copy.add_entry(_xml('EndTime','23:59'))
+            copy.add_entry(_xml('WriteDirectory',self.config.get('Copy_To_Dropbox','dropbox_dir')))
+            tasks.add_entry(copy)
+
         daq.add_entry(tasks)
 
         #--------------------
@@ -432,8 +447,12 @@ class MakeSettingsFile:
                 pp = _xml('PostProcessor','','module="Specgram"')
                 pp.add_entry(_xml('adc_channel_number',ii))
                 pp.add_entry(_xml('DirectoryRoot',os.path.join(DataRootFolder,'Spectrogram')))
+                # If we plan on SSH'ing to our own server, write spectrograms into the SSH directory:
                 if self.config.get('SSH','ssh_Latest')=='1':
                     pp.add_entry(_xml('DirectoryRoot1','ssh_Latest,latest%s.jpg' % ch_name[ii]))
+                # If we're copying to the dropbox directory, write the spectrograms there:
+                if self.config.get('Copy_To_Dropbox','active')=='1':
+                    pp.add_entry(_xml('DirectoryRoot2','%s,latest%s.jpg' %(self.config.get('Copy_To_Dropbox','dropbox_dir'),ch_name[ii])))
                 pp.add_entry(_xml('Duration',self.config.get('Spectrogram','duration')))
                 pp.add_entry(_xml('Period',self.config.get('Spectrogram','period')))
                 pp.add_entry(_xml('NFFT',self.config.get('Spectrogram','NFFT')))

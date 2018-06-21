@@ -101,8 +101,8 @@ class CopyFiles(Task):
             self.logger.info("Checking %s"%writeDirectory)
             # Check disk space at target directory:
             free_bytes = self.checkDisk(writeDirectory)
-            reqd_bytes = 2*1024*2024*1024  # 2 GB (arbitrary stop point. Could calculate a bit more intelligently)
-            self.logger.info("free bytes = %d, reqd_bytes = %d"%(free_bytes, reqd_bytes))
+            reqd_bytes = 5*1024*2024*1024  # 5 GB (arbitrary stop point. Could calculate a bit more intelligently)
+            # self.logger.info("free bytes = %d, reqd_bytes = %d"%(free_bytes, reqd_bytes))
             if (free_bytes > reqd_bytes):
                 #check write directory:
                 if not os.path.isdir(writeDirectory):

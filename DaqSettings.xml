@@ -1,4 +1,4 @@
-<!-- Settings generated at 2018-05-29 01:24:06.773000 [UTC] by settings_generator -->
+<!-- Settings generated at 2018-06-21 20:58:50.570000 [UTC] by settings_generator -->
 
 <DaqConfiguration>
 	<StationSettings>
@@ -64,6 +64,14 @@
 			<EndTime>23:59</EndTime>
 			<WriteDirectory>ssh_Log</WriteDirectory>
 		</Task>
+		<Task module="CopyFiles">
+			<Filename>log/VLFDAQ.log</Filename>
+			<Interval>60</Interval>
+			<Delete>0</Delete>
+			<StartTime>00:00</StartTime>
+			<EndTime>23:59</EndTime>
+			<WriteDirectory>C:\Users\relampago\Dropbox\RELAMPAGO Logs\LF 1</WriteDirectory>
+		</Task>
 	</TaskManagerSettings>
 	<PostProcessorTree>
 		<PostProcessorSequence>
@@ -79,8 +87,9 @@
 				<PostProcessor module="Specgram">
 					<adc_channel_number>0</adc_channel_number>
 					<DirectoryRoot>Spectrogram</DirectoryRoot>
+					<DirectoryRoot2>C:\Users\relampago\Dropbox\RELAMPAGO Logs\LF 1,latestNS.jpg</DirectoryRoot2>
 					<Duration>10</Duration>
-					<Period>60</Period>
+					<Period>1800</Period>
 					<NFFT>16384</NFFT>
 					<fmax>400</fmax>
 					<cmin>-50</cmin>
@@ -106,8 +115,9 @@
 				<PostProcessor module="Specgram">
 					<adc_channel_number>1</adc_channel_number>
 					<DirectoryRoot>Spectrogram</DirectoryRoot>
+					<DirectoryRoot2>C:\Users\relampago\Dropbox\RELAMPAGO Logs\LF 1,latestEW.jpg</DirectoryRoot2>
 					<Duration>10</Duration>
-					<Period>60</Period>
+					<Period>1800</Period>
 					<NFFT>16384</NFFT>
 					<fmax>400</fmax>
 					<cmin>-50</cmin>
@@ -137,7 +147,7 @@
 		<LogPostUrl>/field_sites_logs/logging.php</LogPostUrl>
 		<LogPostServer>vlf-engineering.stanford.edu:80</LogPostServer>
 		<ConsoleLevel>TIMESTAMP</ConsoleLevel>
-		<LogFileLevel>DEBUG</LogFileLevel>
+		<LogFileLevel>TIMESTAMP</LogFileLevel>
 		<PostLevel>WARNING</PostLevel>
 	</Logger>
 </DaqConfiguration>
