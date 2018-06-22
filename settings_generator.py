@@ -352,7 +352,8 @@ class MakeSettingsFile:
         #copy log files to Dropbox
         if self.config.get('Copy_To_Dropbox','active')=='1':
             copy = _xml('Task','','module="CopyFiles"')
-            copy.add_entry(_xml('Filename','log/VLFDAQ.log'))
+            if self.config.get('Copy_To_Dropbox','tail_only') =='0':
+                copy.add_entry(_xml('Filename','log/VLFDAQ.log'))
             copy.add_entry(_xml('Filename1','DaqSettings.xml'))
             copy.add_entry(_xml('Filename2','default_LF_settings.txt'))
         
@@ -362,6 +363,16 @@ class MakeSettingsFile:
             copy.add_entry(_xml('EndTime','23:59'))
             copy.add_entry(_xml('WriteDirectory',self.config.get('Copy_To_Dropbox','dropbox_dir')))
             tasks.add_entry(copy)
+
+            if self.config.get('Copy_To_Dropbox','tail_only') == '1':
+                tail = _xml('Task','','module="SaveTail"')
+                tail.add_entry(_xml('in_file','log/VLFDAQ.log'))
+                tail.add_entry(_xml('out_file',os.path.join(self.config.get('Copy_To_Dropbox','dropbox_dir'),'VLFDAQ.log')))
+                tail.add_entry(_xml('chars',4096))
+                tail.add_entry(_xml('StartTime','00:00'))
+                tail.add_entry(_xml('EndTime','23:59'))
+                tail.add_entry(_xml('Interval',self.config.get('Copy_To_Dropbox','copy_period')))
+                tasks.add_entry(tail)
 
         daq.add_entry(tasks)
 

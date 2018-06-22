@@ -1,15 +1,15 @@
-<!-- Settings generated at 2018-06-21 20:58:50.570000 [UTC] by settings_generator -->
+<!-- Settings generated at 2018-06-22 00:19:39.133000 [UTC] by settings_generator -->
 
 <DaqConfiguration>
 	<StationSettings>
-		<station_id>R3</station_id>
-		<station_name>Relampago_LF3</station_name>
+		<station_id>R1</station_id>
+		<station_name>Relampago_LF1</station_name>
 		<IsLF>1</IsLF>
 		<IsResettable>0</IsResettable>
-		<station_description>.</station_description>
+		<station_description>RELAMPAGO LF Receiver</station_description>
 		<hardware_description>LF Receiver</hardware_description>
 		<antenna_bearings>.</antenna_bearings>
-		<antenna_description>.</antenna_description>
+		<antenna_description>T2 triangle, 13 turns</antenna_description>
 		<install_date>.</install_date>
 		<contact_info>.</contact_info>
 		<adc_type>.</adc_type>
@@ -65,12 +65,21 @@
 			<WriteDirectory>ssh_Log</WriteDirectory>
 		</Task>
 		<Task module="CopyFiles">
-			<Filename>log/VLFDAQ.log</Filename>
-			<Interval>60</Interval>
+			<Filename1>DaqSettings.xml</Filename1>
+			<Filename2>default_LF_settings.txt</Filename2>
+			<Interval>1800</Interval>
 			<Delete>0</Delete>
 			<StartTime>00:00</StartTime>
 			<EndTime>23:59</EndTime>
 			<WriteDirectory>C:\Users\relampago\Dropbox\RELAMPAGO Logs\LF 1</WriteDirectory>
+		</Task>
+		<Task module="SaveTail">
+			<in_file>log/VLFDAQ.log</in_file>
+			<out_file>C:\Users\relampago\Dropbox\RELAMPAGO Logs\LF 1\VLFDAQ.log</out_file>
+			<chars>4096</chars>
+			<StartTime>00:00</StartTime>
+			<EndTime>23:59</EndTime>
+			<Interval>1800</Interval>
 		</Task>
 	</TaskManagerSettings>
 	<PostProcessorTree>

@@ -2,8 +2,8 @@
 #------
 [Basics]
 #------
-station_id=R3
-station_name=Relampago_LF3
+station_id=R1
+station_name=Relampago_LF1
 NumChannels=2
 
 #DAQ card
@@ -145,6 +145,9 @@ PostLevel=WARNING
 # Also sets the spectrogram function to write "LatestNS.jpg, LatestEW.jpg"
 # into the dropbox_dir.
 # Runs every copy_period seconds.
+# If tail_only=0, copy the entire log.
+# If tail_only=1, copy just the last ~50 lines of the log file.
 active=1
+tail_only=1
 dropbox_dir=C:\Users\relampago\Dropbox\RELAMPAGO Logs\LF 1
-copy_period=60
+copy_period=1800

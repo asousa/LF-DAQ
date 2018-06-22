@@ -279,8 +279,16 @@ class _TaskManager:
 # Unit Test
 # =========
 if __name__ == "__main__":
+
+    main_logger = DAQLogger(options)
+    main_logger.start()
+    
+    logger = DAQLogClient(main_logger.log_queue, "MAIN")
+    logger.debug("Main logger ready.")
+    
+
     # Create the TaskManager object
-    tm = TaskManager("Settings.xml")
+    tm = TaskManager("DaqSettings.xml")
     try:
         tm.MainLoop()
     except KeyboardInterrupt:
