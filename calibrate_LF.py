@@ -404,26 +404,34 @@ def calibrate_2ch(file1, file2):
     
     # ----------- Calculate response -----------
     print "Calculating response curves..."
-    Omega = 2*np.pi*FrequencySpacing1*np.arange(1,201,1)
+    Omega = 2*np.pi*FrequencySpacing1*np.arange(1, len(peak_inds)+1,1)*1.0
     Za = Ra + 1j*Omega*La   # Impedance of antenna
     Zd = Rd + 1j*Omega*Ld   # Impedance of dummy loop
     Zp = Lp*Rm/(Lp + Rm)    # Impedance of transformer primary
     Bcal = Vcal*(Za+Zp)/(1j*Omega*Na*Aa)/(2*Rcal+Zd*Zp/(Zd+Zp))*1E12
     CorrectionFactor = Bcal/Bcal_Nominal
-    
-    response1 = peakvals1/pow(2,16)*10*1000/Bcal/len(cal1)*2  # Allegedly: mV(output)/pT(input)
-    response2 = peakvals2/pow(2,16)*10*1000/Bcal/len(cal2)*2
+
+    # freq_vec = np.arange(0, 200*FrequencySpacing1/1000 - 1, FrequencySpacing1/1000)
+    freq_vec = np.arange(0, Fs/2./1000. +1 , 1)
+    response1_raw = peakvals1/pow(2,16)*10*1000/Bcal/len(cal1)*2  # Allegedly: mV(output)/pT(input)
+    response2_raw = peakvals2/pow(2,16)*10*1000/Bcal/len(cal2)*2
+
+    response1 = interp1d(Omega/2./np.pi/1000., response1_raw, bounds_error=False, fill_value ='extrapolate')(freq_vec)
+    response2 = interp1d(Omega/2./np.pi/1000., response2_raw, bounds_error=False, fill_value ='extrapolate')(freq_vec)
 
     responseRatio = np.abs(response1/np.abs(response2))
-    
-    noiseresponse1 = interp1d(noisefreqs, noise_spectrum_1, bounds_error=False, fill_value= None)(Omega/2./np.pi)
-    noiseresponse2 = interp1d(noisefreqs, noise_spectrum_2, bounds_error=False, fill_value= None)(Omega/2./np.pi)
 
-    noiseresponse1 = noiseresponse1*pow(Bcal/peakvals1*Fs,2)
-    noiseresponse2 = noiseresponse2*pow(Bcal/peakvals2*Fs,2)
+    noiseresponse1 = interp1d(noisefreqs, noise_spectrum_1, bounds_error=False, fill_value= 'extrapolate')(freq_vec*1000.)
+    noiseresponse2 = interp1d(noisefreqs, noise_spectrum_2, bounds_error=False, fill_value= 'extrapolate')(freq_vec*1000.)
+
+    peakvals1_int = interp1d(peak_inds*FrequencySpacing1, peakvals1, bounds_error=False, fill_value ='extrapolate')(freq_vec*1000.)
+    peakvals2_int = interp1d(peak_inds*FrequencySpacing2, peakvals2, bounds_error=False, fill_value ='extrapolate')(freq_vec*1000.)
+
+    Bcal_int = interp1d(Omega, Bcal, bounds_error=False, fill_value='extrapolate')(freq_vec*1000.*2.*np.pi)
+
+    noiseresponse1 = noiseresponse1*pow(Bcal_int/peakvals1_int*Fs,2)
+    noiseresponse2 = noiseresponse2*pow(Bcal_int/peakvals2_int*Fs,2)
     # ------- Create output variables ------------
-
-    freq_vec = np.arange(0, 200*FrequencySpacing1/1000 - 1, FrequencySpacing1/1000)
    
     FrequencyResponseNS = np.stack([freq_vec, response1]).T
     FrequencyResponseEW = np.stack([freq_vec, response2]).T

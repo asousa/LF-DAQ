@@ -1,9 +1,9 @@
-<!-- Settings generated at 2018-06-25 18:57:43.532000 [UTC] by settings_generator -->
+<!-- Settings generated at 2018-06-25 22:18:37.385000 [UTC] by settings_generator -->
 
 <DaqConfiguration>
 	<StationSettings>
-		<station_id>R1</station_id>
-		<station_name>Relampago_LF1</station_name>
+		<station_id>R3</station_id>
+		<station_name>Relampago_LF3</station_name>
 		<IsLF>1</IsLF>
 		<IsResettable>0</IsResettable>
 		<station_description>RELAMPAGO LF Receiver</station_description>
@@ -23,7 +23,7 @@
 		<SampleClockPolarity>1</SampleClockPolarity>
 		<StartTriggerPolarity>0</StartTriggerPolarity>
 		<SampleRate>1000000</SampleRate>
-		<DevName>Dev1</DevName>
+		<DevName>Dev2</DevName>
 		<NumChannels>2</NumChannels>
 		<SingleEndedInput>0</SingleEndedInput>
 	</DaqCard>
@@ -32,7 +32,7 @@
 		<Parity>N</Parity>
 		<StopBits>1</StopBits>
 		<BaudRate>9600</BaudRate>
-		<ComPortNumber>7</ComPortNumber>
+		<ComPortNumber>5</ComPortNumber>
 	</GpsClock>
 	<TaskManagerSettings>
 		<Task module="CopyFiles">
@@ -62,7 +62,7 @@
 					<adc_channel_number>0</adc_channel_number>
 					<DirectoryRoot>Calibration Data\Spectrogram</DirectoryRoot>
 					<Duration>10</Duration>
-					<Period>1800</Period>
+					<Period>60</Period>
 					<NFFT>16384</NFFT>
 					<fmax>400</fmax>
 					<cmin>-50</cmin>
@@ -89,7 +89,7 @@
 					<adc_channel_number>1</adc_channel_number>
 					<DirectoryRoot>Calibration Data\Spectrogram</DirectoryRoot>
 					<Duration>10</Duration>
-					<Period>1800</Period>
+					<Period>60</Period>
 					<NFFT>16384</NFFT>
 					<fmax>400</fmax>
 					<cmin>-50</cmin>

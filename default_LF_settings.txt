@@ -2,12 +2,12 @@
 #------
 [Basics]
 #------
-station_id=R1
-station_name=Relampago_LF1
+station_id=R3
+station_name=Relampago_LF3
 NumChannels=2
 
 #DAQ card
-DevName=Dev1
+DevName=Dev2
 SampleRate=1000000
 SampleClockPolarity=1
 StartTriggerPolarity=0
@@ -15,7 +15,7 @@ SingleEndedInput=0
 
 #GPS type: M (Motorola) or T (Truetime)
 GPSType=M
-COM_port=7
+COM_port=5
 
 #Data root folder
 DataRootFolder=
@@ -149,5 +149,5 @@ PostLevel=WARNING
 # If tail_only=1, copy just the last ~50 lines of the log file.
 active=1
 tail_only=1
-dropbox_dir=C:\Users\relampago\Dropbox\RELAMPAGO Logs\LF 1
+dropbox_dir=C:\Users\relampago\Dropbox\RELAMPAGO Logs\LF 3
 copy_period=1800
