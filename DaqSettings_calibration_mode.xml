@@ -1,4 +1,4 @@
-<!-- Settings generated at 2018-06-22 19:22:05.674000 [UTC] by settings_generator -->
+<!-- Settings generated at 2018-06-25 18:57:43.532000 [UTC] by settings_generator -->
 
 <DaqConfiguration>
 	<StationSettings>
@@ -36,24 +36,6 @@
 	</GpsClock>
 	<TaskManagerSettings>
 		<Task module="CopyFiles">
-			<Directory>Continuous</Directory>
-			<Interval>1800</Interval>
-			<Delete>1</Delete>
-			<StartTime>00:00</StartTime>
-			<EndTime>23:59</EndTime>
-			<WriteDirectory0>D:\Continuous</WriteDirectory0>
-			<WriteDirectory1>E:\Continuous</WriteDirectory1>
-		</Task>
-		<Task module="CopyFiles">
-			<Directory>Spectrogram</Directory>
-			<Interval>1800</Interval>
-			<Delete>1</Delete>
-			<StartTime>00:00</StartTime>
-			<EndTime>23:59</EndTime>
-			<WriteDirectory0>D:\Spectrogram</WriteDirectory0>
-			<WriteDirectory1>E:\Spectrogram</WriteDirectory1>
-		</Task>
-		<Task module="CopyFiles">
 			<Filename>DaqSettings.xml</Filename>
 			<Filename0>default_LF_settings.txt</Filename0>
 			<Filename1>default_VLF_settings.txt</Filename1>
@@ -62,24 +44,7 @@
 			<Delete>0</Delete>
 			<StartTime>00:00</StartTime>
 			<EndTime>23:59</EndTime>
-			<WriteDirectory>ssh_Log</WriteDirectory>
-		</Task>
-		<Task module="CopyFiles">
-			<Filename1>DaqSettings.xml</Filename1>
-			<Filename2>default_LF_settings.txt</Filename2>
-			<Interval>1800</Interval>
-			<Delete>0</Delete>
-			<StartTime>00:00</StartTime>
-			<EndTime>23:59</EndTime>
-			<WriteDirectory>C:\Users\relampago\Dropbox\RELAMPAGO Logs\LF 1</WriteDirectory>
-		</Task>
-		<Task module="SaveTail">
-			<in_file>log/VLFDAQ.log</in_file>
-			<out_file>C:\Users\relampago\Dropbox\RELAMPAGO Logs\LF 1\VLFDAQ.log</out_file>
-			<chars>4096</chars>
-			<StartTime>00:00</StartTime>
-			<EndTime>23:59</EndTime>
-			<Interval>1800</Interval>
+			<WriteDirectory>Calibration Data\ssh_Log</WriteDirectory>
 		</Task>
 	</TaskManagerSettings>
 	<PostProcessorTree>
@@ -87,16 +52,15 @@
 			<PostProcessorSequence>
 				<PostProcessor module="MatFileWriter">
 					<adc_channel_number>0</adc_channel_number>
-					<DirectoryRoot>Continuous</DirectoryRoot>
+					<DirectoryRoot>Calibration Data\Continuous</DirectoryRoot>
 					<IsSynoptic>0</IsSynoptic>
-					<Duration>300</Duration>
+					<Duration>60</Duration>
 				</PostProcessor>
 			</PostProcessorSequence>
 			<PostProcessorSequence>
 				<PostProcessor module="Specgram">
 					<adc_channel_number>0</adc_channel_number>
-					<DirectoryRoot>Spectrogram</DirectoryRoot>
-					<DirectoryRoot2>C:\Users\relampago\Dropbox\RELAMPAGO Logs\LF 1,latestNS.jpg</DirectoryRoot2>
+					<DirectoryRoot>Calibration Data\Spectrogram</DirectoryRoot>
 					<Duration>10</Duration>
 					<Period>1800</Period>
 					<NFFT>16384</NFFT>
@@ -115,16 +79,15 @@
 			<PostProcessorSequence>
 				<PostProcessor module="MatFileWriter">
 					<adc_channel_number>1</adc_channel_number>
-					<DirectoryRoot>Continuous</DirectoryRoot>
+					<DirectoryRoot>Calibration Data\Continuous</DirectoryRoot>
 					<IsSynoptic>0</IsSynoptic>
-					<Duration>300</Duration>
+					<Duration>60</Duration>
 				</PostProcessor>
 			</PostProcessorSequence>
 			<PostProcessorSequence>
 				<PostProcessor module="Specgram">
 					<adc_channel_number>1</adc_channel_number>
-					<DirectoryRoot>Spectrogram</DirectoryRoot>
-					<DirectoryRoot2>C:\Users\relampago\Dropbox\RELAMPAGO Logs\LF 1,latestEW.jpg</DirectoryRoot2>
+					<DirectoryRoot>Calibration Data\Spectrogram</DirectoryRoot>
 					<Duration>10</Duration>
 					<Period>1800</Period>
 					<NFFT>16384</NFFT>

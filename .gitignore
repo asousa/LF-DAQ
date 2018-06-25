@@ -30,3 +30,4 @@ __ver__.py
 *.pdf
 Untitled.ipynb
 *.pyc
+DaqSettings.xml
