@@ -1,15 +1,9 @@
 #ifndef np_extensions_INCLUDED
 #define np_extensions_INCLUDED
 
-//#include "C:\Python25\include\Python.h"
-//#include "C:\Python25\Lib\site-packages\numpy\core\include\numpy\ndarrayobject.h"
-//#include <Python.h>
-// #include "C:\Python27_32\include\Python.h"
-#include "C:\Anaconda2\include\Python.h"
 
-//#include <numpy/ndarrayobject.h>
-//#include "/usr/local/lib/python2.5/site-packages/numpy/core/include/numpy/ndarrayobject.h"
-#include "C:\Anaconda2\Lib\site-packages\numpy\core\include\numpy\ndarrayobject.h"
+#include "C:\Python27\include\Python.h"
+#include "C:\Python27\Lib\site-packages\numpy\core\include\numpy\ndarrayobject.h"
 
 #include <iostream>
 #include <math.h>

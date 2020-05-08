@@ -1487,13 +1487,14 @@ def AsyncSave(queue,ch_number,NFFT,fmin,fmax,cmin,cmax,plot_psd,f0,remove_hum,Ta
                        os.remove(filenames[i])
 
             #Save figure to disk and copy to other locations
-##            print 'Saving figure to %s' % filenames[0]
-##            fig.canvas.print_figure(filenames[0],dpi=dpi)
+            # 5.6.2020 -- using matplotlib's save function -- seems identical, 
+            # and means one less library to deal with (pillow / PIL)
+            fig.canvas.print_figure(filenames[0],dpi=100, quality=quality_jpg)
 
-            image_size = fig.canvas.get_width_height()
-            imageRgb = fig.canvas.tostring_rgb()
-            pilImage = Image.fromstring("RGB",image_size,imageRgb)
-            pilImage.save(filenames[0],quality=quality_jpg)
+            # image_size = fig.canvas.get_width_height()
+            # imageRgb = fig.canvas.tostring_rgb()
+            # pilImage = Image.frombytes("RGB",image_size,imageRgb)
+            # pilImage.save(filenames[0],quality=quality_jpg)
             logger.info("Wrote: %s" % filenames[0])
             
             for i,afile in enumerate(filenames):

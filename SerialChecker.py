@@ -62,15 +62,15 @@ if __name__ == '__main__':
         # Open the serial port and launch the thread
         try:
             if os.name=='nt':
-                ser = Serial((comPort-1), baudrate=9600, bytesize=8, parity='N', stopbits=1)
+                ser = Serial('COM%d'%(comPort), baudrate=9600, bytesize=8, parity='N', stopbits=1)
             else:
                 ser = Serial(comPort, baudrate=9600, bytesize=8, parity='N', stopbits=1)
         except:
             print 'Serial port does not exist or already in use.'
             continue
         else:
-            ser.setTimeout(2.0)
-            
+            # ser.setTimeout(2.0)
+            ser.timeout = 2.0
             #self.logger.debug("Serial port opened on COM %d with timeout of %d" % (self.comPortNumber, self.ser.getTimeout()))
             #print "Ser=%s" % ser               
 

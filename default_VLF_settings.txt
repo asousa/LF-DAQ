@@ -15,7 +15,7 @@ SingleEndedInput=0
 
 #GPS type: M (Motorola) or T (Truetime)
 GPSType=M
-COM_port=1
+COM_port=3
 
 #Data root folder
 DataRootFolder=
@@ -34,9 +34,9 @@ local_retrieval=0
 ssh_Broadband=0
 ssh_Narrowband=0
 KeepLocalCopyNB=0
-ssh_Latest=1
-ssh_Log=1
-remote_retrieval=1
+ssh_Latest=0
+ssh_Log=0
+remote_retrieval=0
 
 #ssh settings:
 ssh_server=vlf-alexandria.stanford.edu
@@ -49,72 +49,72 @@ end_time=23:59
 #------
 [POST]
 #------
-active=1
+active=0
 post_server=http://vlf-engineering.stanford.edu/field_sites_uploads/upload_file.php
 
 #--------
 [Cleanup]
 #--------
-active=1
+active=0
 
 #Pacman days (if active)
-cleanup_cont_days=5
-
+cleanup_cont_days = 1
 #Synoptic/ narrowband/ spectrogram pacman days (if active)
 #(useful if external hard drive removed, for example):
-cleanup_synoptic_days=14
-cleanup_narrowband_days=14
+cleanup_synoptic_days=5
+cleanup_narrowband_days=5
 cleanup_spec_days=5
 
 #-----------------
 [Copy_To_External]
 #-----------------
-active=0
+active=1
 
 #External drive path (if active)
-external_drive=E:/
+external_drive=D:\,E:\
 
 #--------------
 [BBFileWriters]
 #--------------
 Continuous=1
-ContinuousDuration=600
-Synoptic=1
-SynopticPeriod=300
+ContinuousDuration=300
+Synoptic=0
+SynopticPeriod=3600
 SynopticDuration=60
-Snapshot=1
+Snapshot=0
 
 #------------
 [Narrowband]
 #------------
-active=0
+active=1
 call_signs=NWC,NPM,NLK,NAA,NML,DHO,JJI
 
 #------------
 [Spectrogram]
 #------------
 active=1
-copy_to_external=0
+copy_to_external=1
 duration=10
-period=300
-NFFT=1024
-fmax=50
-cmin=-15
-cmax=50
+period=1800
+NFFT=16384
+fmax=400
+cmin=-50
+cmax=10
 remove_hum=0
 f0=60
-hum_fc=3000
+hum_fc=4000
 psd=0
 quality=75
+
 
 #---------------
 [Station_Notes]
 #---------------
-#Filler stuff (not required)
-station_description=.
+# (Please actually put this in)
+station_description=RELAMPAGO LF Receiver
 hardware_description=LF Receiver
 antenna_bearings=.
-antenna_description=.
+antenna_description=T2 triangle, 13 turns
 install_date=.
 contact_info=.
 adc_type=.
@@ -126,10 +126,28 @@ gps_sn=.
 [Logger]
 #------
 LogDir=log/
-ErrorEmail=1
+ErrorEmail=0
+ErrorEmailTo=cu.lair.fieldsites@gmail.com
+ErrorEmailFrom=cu.lair.fieldsites@gmail.com
+ErrorEmailPw=relampagoLF
 ErrorPost=0
 LogPostUrl=/field_sites_logs/logging.php
 LogPostServer=vlf-engineering.stanford.edu:80
 ConsoleLevel=TIMESTAMP
-LogFileLevel=WARNING
+LogFileLevel=TIMESTAMP
 PostLevel=WARNING
+  
+
+#-----------------
+[Copy_To_Dropbox]
+#-----------------
+# This module copies the log file and config file to dropbox_dir
+# Also sets the spectrogram function to write "LatestNS.jpg, LatestEW.jpg"
+# into the dropbox_dir.
+# Runs every copy_period seconds.
+# If tail_only=0, copy the entire log.
+# If tail_only=1, copy just the last ~50 lines of the log file.
+active=0
+tail_only=0
+dropbox_dir=C:\Users\relampago\Dropbox\RELAMPAGO Logs\LF 3
+copy_period=1800

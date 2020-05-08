@@ -1,10 +1,10 @@
-<!-- Settings generated at 2018-06-22 19:22:05.674000 [UTC] by settings_generator -->
+<!-- Settings generated at 2020-05-08 01:15:32.833000 [UTC] by settings_generator -->
 
 <DaqConfiguration>
 	<StationSettings>
-		<station_id>R1</station_id>
-		<station_name>Relampago_LF1</station_name>
-		<IsLF>1</IsLF>
+		<station_id>XX</station_id>
+		<station_name>site_name</station_name>
+		<IsLF>0</IsLF>
 		<IsResettable>0</IsResettable>
 		<station_description>RELAMPAGO LF Receiver</station_description>
 		<hardware_description>LF Receiver</hardware_description>
@@ -22,7 +22,7 @@
 		<StartTriggerName>PFI0</StartTriggerName>
 		<SampleClockPolarity>1</SampleClockPolarity>
 		<StartTriggerPolarity>0</StartTriggerPolarity>
-		<SampleRate>1000000</SampleRate>
+		<SampleRate>100000</SampleRate>
 		<DevName>Dev1</DevName>
 		<NumChannels>2</NumChannels>
 		<SingleEndedInput>0</SingleEndedInput>
@@ -32,7 +32,7 @@
 		<Parity>N</Parity>
 		<StopBits>1</StopBits>
 		<BaudRate>9600</BaudRate>
-		<ComPortNumber>7</ComPortNumber>
+		<ComPortNumber>3</ComPortNumber>
 	</GpsClock>
 	<TaskManagerSettings>
 		<Task module="CopyFiles">
@@ -54,6 +54,15 @@
 			<WriteDirectory1>E:\Spectrogram</WriteDirectory1>
 		</Task>
 		<Task module="CopyFiles">
+			<Directory>Narrowband</Directory>
+			<Interval>1800</Interval>
+			<Delete>1</Delete>
+			<StartTime>00:00</StartTime>
+			<EndTime>23:59</EndTime>
+			<WriteDirectory0>D:\Narrowband</WriteDirectory0>
+			<WriteDirectory1>E:\Narrowband</WriteDirectory1>
+		</Task>
+		<Task module="CopyFiles">
 			<Filename>DaqSettings.xml</Filename>
 			<Filename0>default_LF_settings.txt</Filename0>
 			<Filename1>default_VLF_settings.txt</Filename1>
@@ -63,23 +72,6 @@
 			<StartTime>00:00</StartTime>
 			<EndTime>23:59</EndTime>
 			<WriteDirectory>ssh_Log</WriteDirectory>
-		</Task>
-		<Task module="CopyFiles">
-			<Filename1>DaqSettings.xml</Filename1>
-			<Filename2>default_LF_settings.txt</Filename2>
-			<Interval>1800</Interval>
-			<Delete>0</Delete>
-			<StartTime>00:00</StartTime>
-			<EndTime>23:59</EndTime>
-			<WriteDirectory>C:\Users\relampago\Dropbox\RELAMPAGO Logs\LF 1</WriteDirectory>
-		</Task>
-		<Task module="SaveTail">
-			<in_file>log/VLFDAQ.log</in_file>
-			<out_file>C:\Users\relampago\Dropbox\RELAMPAGO Logs\LF 1\VLFDAQ.log</out_file>
-			<chars>4096</chars>
-			<StartTime>00:00</StartTime>
-			<EndTime>23:59</EndTime>
-			<Interval>1800</Interval>
 		</Task>
 	</TaskManagerSettings>
 	<PostProcessorTree>
@@ -93,10 +85,21 @@
 				</PostProcessor>
 			</PostProcessorSequence>
 			<PostProcessorSequence>
+				<PostProcessor module="Narrowband">
+					<adc_channel_number>0</adc_channel_number>
+					<DirectoryRoot>Narrowband</DirectoryRoot>
+					<do_sph_chan>1</do_sph_chan>
+					<do_low_res>1</do_low_res>
+					<Duration>60</Duration>
+					<call_sign>NWC,NPM,NLK,NAA,NML,DHO,JJI</call_sign>
+					<call_sign_file>nb.conf</call_sign_file>
+					<filter_taps>filter_taps.txt</filter_taps>
+				</PostProcessor>
+			</PostProcessorSequence>
+			<PostProcessorSequence>
 				<PostProcessor module="Specgram">
 					<adc_channel_number>0</adc_channel_number>
 					<DirectoryRoot>Spectrogram</DirectoryRoot>
-					<DirectoryRoot2>C:\Users\relampago\Dropbox\RELAMPAGO Logs\LF 1,latestNS.jpg</DirectoryRoot2>
 					<Duration>10</Duration>
 					<Period>1800</Period>
 					<NFFT>16384</NFFT>
@@ -121,10 +124,21 @@
 				</PostProcessor>
 			</PostProcessorSequence>
 			<PostProcessorSequence>
+				<PostProcessor module="Narrowband">
+					<adc_channel_number>1</adc_channel_number>
+					<DirectoryRoot>Narrowband</DirectoryRoot>
+					<do_sph_chan>1</do_sph_chan>
+					<do_low_res>1</do_low_res>
+					<Duration>86400</Duration>
+					<call_sign>NWC,NPM,NLK,NAA,NML,DHO,JJI</call_sign>
+					<call_sign_file>nb.conf</call_sign_file>
+					<filter_taps>filter_taps.txt</filter_taps>
+				</PostProcessor>
+			</PostProcessorSequence>
+			<PostProcessorSequence>
 				<PostProcessor module="Specgram">
 					<adc_channel_number>1</adc_channel_number>
 					<DirectoryRoot>Spectrogram</DirectoryRoot>
-					<DirectoryRoot2>C:\Users\relampago\Dropbox\RELAMPAGO Logs\LF 1,latestEW.jpg</DirectoryRoot2>
 					<Duration>10</Duration>
 					<Period>1800</Period>
 					<NFFT>16384</NFFT>

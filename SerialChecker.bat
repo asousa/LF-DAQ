@@ -1,3 +1,2 @@
-c:\python27_32\python.exe SerialChecker.py --search
-
+python SerialChecker.py --search
 pause

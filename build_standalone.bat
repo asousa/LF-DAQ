@@ -1,2 +1,2 @@
-c:\Users\relampago\Anaconda2\python build_via_cx.py build
+python build_via_cx.py build
 pause
