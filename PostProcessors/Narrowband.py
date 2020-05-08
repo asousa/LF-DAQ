@@ -147,9 +147,9 @@ class Filt:
 
         f0 = f0/(self.fs/2)
 
-        NFFT = 2.0**nextpow2(self.n)
+        NFFT = int(2.0**nextpow2(self.n))
         f_n = np.linspace(0,NFFT/2,NFFT/2+1)/(NFFT/2)
-        H = np.zeros(NFFT/2.0+1)
+        H = np.zeros(int(NFFT/2.0+1))
 
         H.put(np.where(f_n>=f0),1)
 
@@ -190,9 +190,9 @@ class Filt:
         f0 = f0/(self.fs/2.0)
         df = df/(self.fs/2.0)
 
-        NFFT = 2.0**nextpow2(self.n)
+        NFFT = int(2.0**nextpow2(self.n))
         f_n = np.linspace(0,NFFT/2.0,NFFT/2.0+1.0)/(NFFT/2.0)
-        H = np.zeros(NFFT/2+1)
+        H = np.zeros(int(NFFT/2+1))
 
         for ii in range(len(f0)):
             f_lo = f0[ii]-df[ii]/2.0

@@ -64,7 +64,7 @@ if os.name=='nt':
 
 # Libraries to include
 includes =("matplotlib", "matplotlib.backends","matplotlib.figure",
-	       "pylab","numpy",
+	       "numpy",
            "PostProcessors","DaqCards","GpsClocks","Tasks",
            "paramiko",
            "scipy.ndimage",
@@ -82,8 +82,8 @@ excludes = ('py_readline','setuptools','Traits','_gtkagg', '_agg2',
 
 execs = [Executable('main.py'),
 		 Executable('SerialChecker.py'),
-		 Executable('GUI.py', base='Win32GUI'),
-		 Executable('settings_generator.py')]
+		 Executable('settings_generator.py'),
+		 Executable('GUI.py', base='Win32GUI')]
 
 # execs = [Executable('GUI.py', base='Win32GUI')]
 		 
@@ -102,6 +102,7 @@ if not os.path.exists(build_root):
 build_exe_options = {"packages": includes,
 					 "excludes": excludes,
 					 "optimize" : 2,
+					 "include_msvcr":True,
 					 "build_exe": software_dir}
 
 # GUI applications require a different base on Windows (the default is for a
@@ -136,10 +137,11 @@ subprocess.call('python settings_generator.py --c=default_LF_settings.txt --f=Da
 # subprocess.call('python settings_generator.py --c=default_VLF_settings.txt')
 
 # Copy default settings files:
-subprocess.call('copy default_LF_settings.txt %s\LF_settings.txt'%build_dir, shell=True)
-subprocess.call('copy default_VLF_settings.txt %s\VLF_settings.txt'%build_dir, shell=True)
+subprocess.call('copy default_LF_settings.txt %s\settings_LF.txt'%build_dir, shell=True)
+subprocess.call('copy default_VLF_settings.txt %s\settings_VLF.txt'%build_dir, shell=True)
 subprocess.call('copy DaqSettings.xml %s\DaqSettings.xml'%build_dir, shell=True)
 subprocess.call('copy nb.conf %s\nb.conf'%build_dir, shell=True)
+subprocess.call('copy filter_taps.txt %s\filter_taps.txt'%build_dir, shell=True)
 
 
 # Build the .bat run scripts:
@@ -155,8 +157,8 @@ with open(os.path.join(build_dir,"SerialChecker.bat"),'w') as f:
 	f.write('\npause\n')
 
 with open(os.path.join(build_dir,"Make_DaqSettings_for_LF.bat"),'w') as f:
-	f.write('%s --c=LF_settings.txt --f=DaqSettings.xml\n'%os.path.join('software','settings_generator.exe'))
+	f.write('%s --c=settings_LF.txt --f=DaqSettings.xml\n'%os.path.join('software','settings_generator.exe'))
 	f.write('\npause\n')
 with open(os.path.join(build_dir,"Make_DaqSettings_for_VLF.bat"),'w') as f:
-	f.write('%s --c=VLF_settings.txt --f=DaqSettings.xml\n'%os.path.join('software','settings_generator.exe'))
+	f.write('%s --c=settings_VLF.txt --f=DaqSettings.xml\n'%os.path.join('software','settings_generator.exe'))
 	f.write('\npause\n')
