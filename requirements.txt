@@ -6,6 +6,6 @@ pillow-pil
 scipy==1.0.0
 wxpython==4.0.1
 matplotlib==2.1.2
-paramiko==2.4.1
+paramiko==2.4.2
 poster==0.8.1
 cx-freeze==5.1.1
