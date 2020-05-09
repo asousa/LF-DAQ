@@ -1,8 +1,6 @@
 colorama==0.3.9
 numpy==1.14.0
 pyserial==3.4
-pillow==5.0.0
-pillow-pil
 scipy==1.0.0
 wxpython==4.0.1
 matplotlib==2.1.2

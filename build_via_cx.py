@@ -122,7 +122,8 @@ subprocess.call('copy default_LF_settings.txt %s\settings_LF.txt'%build_dir, she
 subprocess.call('copy default_VLF_settings.txt %s\settings_VLF.txt'%build_dir, shell=True)
 subprocess.call('copy DaqSettings.xml %s\DaqSettings.xml'%build_dir, shell=True)
 subprocess.call('copy nb.conf %s\nb.conf'%build_dir, shell=True)
-subprocess.call('copy filter_taps.txt %s\filter_taps.txt'%build_dir, shell=True)
+print('copy filter_taps.txt %s\\filter_taps.txt'%build_dir)
+subprocess.call('copy filter_taps.txt %s\\filter_taps.txt'%build_dir, shell=True)
 
 
 # Build the .bat run scripts:

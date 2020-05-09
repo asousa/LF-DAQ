@@ -2,9 +2,14 @@
 #define np_extensions_INCLUDED
 
 
-#include "C:\Python27\include\Python.h"
-#include "C:\Python27\Lib\site-packages\numpy\core\include\numpy\ndarrayobject.h"
+// #include "C:\Python27\include\Python.h"
+// #include "C:\Python27\Lib\site-packages\numpy\core\include\numpy\ndarrayobject.h"
 
+// including numpy by a relative path instead of absolute requires
+// "include_dirs = [numpy.get_include()])" in setup.py. 
+// But this way you don't have to edit this file on every machine. --5.2020 APS
+#include <Python.h>
+#include "numpy/ndarrayobject.h"
 #include <iostream>
 #include <math.h>
 

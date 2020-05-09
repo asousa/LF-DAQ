@@ -10,7 +10,7 @@ NumChannels=2
 DevName=Dev1
 SampleRate=100000
 SampleClockPolarity=1
-StartTriggerPolarity=0
+StartTriggerPolarity=1
 SingleEndedInput=0
 
 #GPS type: M (Motorola) or T (Truetime)
