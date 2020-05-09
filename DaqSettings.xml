@@ -1,9 +1,9 @@
-<!-- Settings generated at 2020-05-08 20:46:18.464000 [UTC] by settings_generator -->
+<!-- Settings generated at 2020-05-09 00:35:41.419000 [UTC] by settings_generator -->
 
 <DaqConfiguration>
 	<StationSettings>
-		<station_id>R3</station_id>
-		<station_name>Relampago_LF3</station_name>
+		<station_id>XX</station_id>
+		<station_name>site_name</station_name>
 		<IsLF>1</IsLF>
 		<IsResettable>0</IsResettable>
 		<station_description>RELAMPAGO LF Receiver</station_description>
@@ -23,7 +23,7 @@
 		<SampleClockPolarity>1</SampleClockPolarity>
 		<StartTriggerPolarity>0</StartTriggerPolarity>
 		<SampleRate>1000000</SampleRate>
-		<DevName>Dev2</DevName>
+		<DevName>Dev1</DevName>
 		<NumChannels>2</NumChannels>
 		<SingleEndedInput>0</SingleEndedInput>
 	</DaqCard>
@@ -32,7 +32,7 @@
 		<Parity>N</Parity>
 		<StopBits>1</StopBits>
 		<BaudRate>9600</BaudRate>
-		<ComPortNumber>5</ComPortNumber>
+		<ComPortNumber>3</ComPortNumber>
 	</GpsClock>
 	<TaskManagerSettings>
 		<Task module="CopyFiles">
@@ -66,7 +66,6 @@
 		</Task>
 		<Task module="CopyFiles">
 			<Filename1>DaqSettings.xml</Filename1>
-			<Filename2>default_LF_settings.txt</Filename2>
 			<Interval>1800</Interval>
 			<Delete>0</Delete>
 			<StartTime>00:00</StartTime>
