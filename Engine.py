@@ -544,11 +544,13 @@ class Engine:
                 self.parent.onecmd("quit")
                 return
 
-        self.logger.info('Waiting 60 seconds before restart.')
-        sleep(30.0 + random.random())
-        self.logger.info("30 Seconds to go.")
-        sleep(30.0 + random.random())
+        # self.logger.info('Waiting 60 seconds before restart.')
+        # sleep(30.0 + random.random())
+        # self.logger.info("30 Seconds to go.")
+        # sleep(30.0 + random.random())
         
+        self.logger.info('Waiting 10 seconds before restart')
+        sleep(10.0 + random.random())
         
         self.exceptions = 0
         self.DAQ_flags.Reset()
@@ -1354,10 +1356,12 @@ class Engine:
 
                     # Noticed that on GPS errors (no data - maybe a tick skip)
                     #  want to wait a small amount of time 
-                    self.logger.info('Waiting 60 seconds before restart.')
-                    sleep(60.0 + random.random())
-                    self.logger.info("Waiting 60 more.")
-                    sleep(60.0 + random.random())
+                    # self.logger.info('Waiting 60 seconds before restart.')
+                    # sleep(60.0 + random.random())
+                    # self.logger.info("Waiting 60 more.")
+                    # sleep(60.0 + random.random())
+                    self.logger.info('Waiting 10 seconds before restart.')
+                    sleep(10.0 + random.random())
                     
                     pass
                 

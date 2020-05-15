@@ -57,6 +57,8 @@ from utilities.loadMATdata import *
 from utilities.restart_counter import Restart_counter
 from utilities import read_config
 
+from numpy.lib.stride_tricks import as_strided
+
 #CURRENT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 #print CURRENT_DIR
 #sys.path.insert(0, CURRENT_DIR)
@@ -448,7 +450,7 @@ class removeHum():
         """ removes powerline harmonics """
         #downsample to run faster:
 
-        Q = max(np.floor(fs/2.0/(self.fc*1.3)),1)
+        Q = int(max(np.floor(fs/2.0/(self.fc*1.3)),1))
 ##        print Q
         if Q > 1:
             nfilt = 351
@@ -503,11 +505,11 @@ class removeHum():
 ##        print 'starting fs: %3.1f' % fs
 
         #downsample to run faster:
-        Q = max(np.floor(fs/2.0/(max_freq*1.8)),1)
+        Q = int(max(np.floor(fs/2.0/(max_freq*1.8)),1))
 ##        print Q,fs,max_freq
         if Q > 1:
             nfilt = 151
-            h = filt(51,fs)
+            h = filt(51,fs) 
             f0 = max_freq*1.3
             h.lowpass(f0,win = ('kaiser',5))
             y = h.filter(np.ascontiguousarray(x))
@@ -694,7 +696,7 @@ class STFT():
         axis = None
         end = 'pad'
         endvalue = 0
-        if win==None:
+        if win is None:
             win = np.hamming(NFFT)
         framelen = len(win)
         self.segment_axis(x,framelen,noverlap,axis,end,endvalue)
@@ -703,7 +705,7 @@ class STFT():
         #keep everything but data:
         self.framelen = framelen
         self.noverlap = noverlap
-        self.NFFT = NFFT
+        self.NFFT = int(NFFT)
         self.win = win
         self.fs =fs
         self.t = (np.linspace(0,self.z.shape[0]-1,self.z.shape[0])*(framelen-noverlap) + (framelen-1)/2)/fs
@@ -711,9 +713,9 @@ class STFT():
         #do one column at a time so as not to stress the memory usage or hog cpu cycles:
         if len(self.z[0])==NFFT:
             for ii in range(self.z.shape[0]):
-                self.z[ii] = fft.fft(self.z[ii]*win,NFFT)
+                self.z[ii] = fft.fft(self.z[ii]*win,self.NFFT)
         else:
-            self.z = fft.fft(self.z*win,NFFT)
+            self.z = fft.fft(self.z*win,self.NFFT)
 
         #make sure no 0's in fft (so no 0 in log10 calls):
         self.z += 1e-10
@@ -919,8 +921,6 @@ class STFT():
             slope = np.append(slope,x[-1]-x[-2])
         return(indices,slope)
 
-
-
     def segment_axis(self,a, length, overlap=0, axis=None, end='cut', endvalue=0):
         """Generate a new array that chops the given array along the given axis into overlapping frames.
 
@@ -970,6 +970,9 @@ class STFT():
                 rounddown = 0
             assert rounddown<l<roundup
             assert roundup==rounddown+(length-overlap) or (roundup==length and rounddown==0)
+
+            roundup = int(roundup)
+            rounddown = int(rounddown)
             a = a.swapaxes(-1,axis)
 
             if end=='cut':
@@ -993,10 +996,10 @@ class STFT():
             raise ValueError, "Not enough data points to segment array in 'cut' mode; try 'pad' or 'wrap'"
         assert l>=length
         assert (l-length)%(length-overlap) == 0
-        n = 1+(l-length)//(length-overlap)
+        n = int(1+(l-length)//(length-overlap))
         s = a.strides[axis]
         newshape = a.shape[:axis]+(n,length)+a.shape[axis+1:]
-        newstrides = a.strides[:axis]+((length-overlap)*s,s) + a.strides[axis+1:]
+        newstrides = a.strides[:axis]+(int((length-overlap)*s),s) + a.strides[axis+1:]
 
         try:
             
@@ -1004,7 +1007,7 @@ class STFT():
         except TypeError:
             a = a.copy()
             # Shape doesn't change but strides does
-            newstrides = a.strides[:axis]+((length-overlap)*s,s) + a.strides[axis+1:]
+            newstrides = a.strides[:axis]+(int((length-overlap)*s),s) + a.strides[axis+1:]
             self.z = np.ndarray.__new__(np.ndarray,strides=newstrides,shape=newshape,buffer=a,dtype=a.dtype).astype(np.complex)
 
         except:
