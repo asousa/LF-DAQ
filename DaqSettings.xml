@@ -1,15 +1,15 @@
-<!-- Settings generated at 2020-05-08 20:46:18.464000 [UTC] by settings_generator -->
+<!-- Settings generated at 2020-05-09 01:16:52.719000 [UTC] by settings_generator -->
 
 <DaqConfiguration>
 	<StationSettings>
-		<station_id>R3</station_id>
-		<station_name>Relampago_LF3</station_name>
+		<station_id>XX</station_id>
+		<station_name>site_name</station_name>
 		<IsLF>1</IsLF>
 		<IsResettable>0</IsResettable>
-		<station_description>RELAMPAGO LF Receiver</station_description>
+		<station_description>Station Name</station_description>
 		<hardware_description>LF Receiver</hardware_description>
 		<antenna_bearings>.</antenna_bearings>
-		<antenna_description>T2 triangle, 13 turns</antenna_description>
+		<antenna_description>Antenna Description</antenna_description>
 		<install_date>.</install_date>
 		<contact_info>.</contact_info>
 		<adc_type>.</adc_type>
@@ -23,7 +23,7 @@
 		<SampleClockPolarity>1</SampleClockPolarity>
 		<StartTriggerPolarity>0</StartTriggerPolarity>
 		<SampleRate>1000000</SampleRate>
-		<DevName>Dev2</DevName>
+		<DevName>Dev1</DevName>
 		<NumChannels>2</NumChannels>
 		<SingleEndedInput>0</SingleEndedInput>
 	</DaqCard>
@@ -32,7 +32,7 @@
 		<Parity>N</Parity>
 		<StopBits>1</StopBits>
 		<BaudRate>9600</BaudRate>
-		<ComPortNumber>5</ComPortNumber>
+		<ComPortNumber>3</ComPortNumber>
 	</GpsClock>
 	<TaskManagerSettings>
 		<Task module="CopyFiles">
@@ -64,23 +64,6 @@
 			<EndTime>23:59</EndTime>
 			<WriteDirectory>ssh_Log</WriteDirectory>
 		</Task>
-		<Task module="CopyFiles">
-			<Filename1>DaqSettings.xml</Filename1>
-			<Filename2>default_LF_settings.txt</Filename2>
-			<Interval>1800</Interval>
-			<Delete>0</Delete>
-			<StartTime>00:00</StartTime>
-			<EndTime>23:59</EndTime>
-			<WriteDirectory>C:\Users\relampago\Dropbox\RELAMPAGO Logs\LF 3</WriteDirectory>
-		</Task>
-		<Task module="SaveTail">
-			<in_file>log/VLFDAQ.log</in_file>
-			<out_file>C:\Users\relampago\Dropbox\RELAMPAGO Logs\LF 3\VLFDAQ.log</out_file>
-			<chars>4096</chars>
-			<StartTime>00:00</StartTime>
-			<EndTime>23:59</EndTime>
-			<Interval>1800</Interval>
-		</Task>
 	</TaskManagerSettings>
 	<PostProcessorTree>
 		<PostProcessorSequence>
@@ -96,7 +79,6 @@
 				<PostProcessor module="Specgram">
 					<adc_channel_number>0</adc_channel_number>
 					<DirectoryRoot>Spectrogram</DirectoryRoot>
-					<DirectoryRoot2>C:\Users\relampago\Dropbox\RELAMPAGO Logs\LF 3,latestNS.jpg</DirectoryRoot2>
 					<Duration>10</Duration>
 					<Period>1800</Period>
 					<NFFT>16384</NFFT>
@@ -124,7 +106,6 @@
 				<PostProcessor module="Specgram">
 					<adc_channel_number>1</adc_channel_number>
 					<DirectoryRoot>Spectrogram</DirectoryRoot>
-					<DirectoryRoot2>C:\Users\relampago\Dropbox\RELAMPAGO Logs\LF 3,latestEW.jpg</DirectoryRoot2>
 					<Duration>10</Duration>
 					<Period>1800</Period>
 					<NFFT>16384</NFFT>
@@ -149,9 +130,9 @@
 	<Logger>
 		<LogDir>log/</LogDir>
 		<ErrorEmail>0</ErrorEmail>
-		<ErrorEmailFrom>cu.lair.fieldsites@gmail.com</ErrorEmailFrom>
-		<ErrorEmailTo>cu.lair.fieldsites@gmail.com</ErrorEmailTo>
-		<ErrorEmailPw>relampagoLF</ErrorEmailPw>
+		<ErrorEmailFrom>[your_email_here]</ErrorEmailFrom>
+		<ErrorEmailTo>[your_email_here]</ErrorEmailTo>
+		<ErrorEmailPw>[your_password_here]</ErrorEmailPw>
 		<ErrorPost>0</ErrorPost>
 		<LogPostUrl>/field_sites_logs/logging.php</LogPostUrl>
 		<LogPostServer>vlf-engineering.stanford.edu:80</LogPostServer>

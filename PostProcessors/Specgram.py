@@ -28,7 +28,7 @@ from multiprocessing import Queue, Process, Pool
    
 from Queue import Full, Empty
 
-import Image
+# import Image   # 5.2020 -- removing dependency on Pillow / PIL
 import math as ma
 
 # Numpy

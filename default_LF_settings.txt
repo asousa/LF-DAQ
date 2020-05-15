@@ -2,12 +2,12 @@
 #------
 [Basics]
 #------
-station_id=R3
-station_name=Relampago_LF3
+station_id=XX
+station_name=site_name
 NumChannels=2
 
 #DAQ card
-DevName=Dev2
+DevName=Dev1
 SampleRate=1000000
 SampleClockPolarity=1
 StartTriggerPolarity=0
@@ -15,7 +15,7 @@ SingleEndedInput=0
 
 #GPS type: M (Motorola) or T (Truetime)
 GPSType=M
-COM_port=5
+COM_port=3
 
 #Data root folder
 DataRootFolder=
@@ -111,10 +111,10 @@ quality=75
 [Station_Notes]
 #---------------
 # (Please actually put this in)
-station_description=RELAMPAGO LF Receiver
+station_description=Station Name
 hardware_description=LF Receiver
 antenna_bearings=.
-antenna_description=T2 triangle, 13 turns
+antenna_description=Antenna Description
 install_date=.
 contact_info=.
 adc_type=.
@@ -127,9 +127,9 @@ gps_sn=.
 #------
 LogDir=log/
 ErrorEmail=0
-ErrorEmailTo=cu.lair.fieldsites@gmail.com
-ErrorEmailFrom=cu.lair.fieldsites@gmail.com
-ErrorEmailPw=relampagoLF
+ErrorEmailTo=[your_email_here]
+ErrorEmailFrom=[your_email_here]
+ErrorEmailPw=[your_password_here]
 ErrorPost=0
 LogPostUrl=/field_sites_logs/logging.php
 LogPostServer=vlf-engineering.stanford.edu:80
@@ -147,7 +147,7 @@ PostLevel=WARNING
 # Runs every copy_period seconds.
 # If tail_only=0, copy the entire log.
 # If tail_only=1, copy just the last ~50 lines of the log file.
-active=1
-tail_only=1
-dropbox_dir=C:\Users\relampago\Dropbox\RELAMPAGO Logs\LF 3
+active=0
+tail_only=0
+dropbox_dir=C:\Users\lair\Dropbox\logs
 copy_period=1800

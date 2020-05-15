@@ -355,7 +355,7 @@ class MakeSettingsFile:
             if self.config.get('Copy_To_Dropbox','tail_only') =='0':
                 copy.add_entry(_xml('Filename','log/VLFDAQ.log'))
             copy.add_entry(_xml('Filename1','DaqSettings.xml'))
-            copy.add_entry(_xml('Filename2','default_LF_settings.txt'))
+            # copy.add_entry(_xml('Filename2','default_LF_settings.txt'))
         
             copy.add_entry(_xml('Interval',self.config.get('Copy_To_Dropbox','copy_period')))
             copy.add_entry(_xml('Delete',0))
