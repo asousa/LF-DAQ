@@ -71,14 +71,14 @@ cleanup_spec_days=5
 active=1
 
 #External drive path (if active)
-# This can be a comma-separated list of drives
+#This can be a comma-separated list of drives
 external_drive=D:\,E:\
 
 #--------------
 [BBFileWriters]
 #--------------
 Continuous=1
-ContinuousDuration=300
+ContinuousDuration=1800
 Synoptic=0
 SynopticPeriod=3600
 SynopticDuration=60
@@ -100,7 +100,7 @@ period=1800
 NFFT=1024
 fmax=40
 cmin=-50
-cmax=30
+cmax=40
 remove_hum=0
 f0=60
 hum_fc=4000
@@ -128,9 +128,9 @@ gps_sn=.
 #------
 LogDir=log/
 ErrorEmail=0
-ErrorEmailTo=<your_email_here>
-ErrorEmailFrom=<your_email_here>
-ErrorEmailPw=<your_very_insecure_password_here>
+ErrorEmailTo=[your_email_here]
+ErrorEmailFrom=[your_email_here]
+ErrorEmailPw=[your_very_insecure_password_here]
 
 # Server to post log messages to -- this is
 # how it worked at Stanford, but you might
@@ -156,5 +156,5 @@ PostLevel=WARNING
 # If tail_only=1, copy just the last ~50 lines of the log file.
 active=0
 tail_only=0
-dropbox_dir=C:\<path\to\dropbox>
+dropbox_dir=C:\Users\lair\Dropbox\logs
 copy_period=1800
