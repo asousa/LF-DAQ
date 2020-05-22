@@ -5,6 +5,7 @@ from getopt import getopt
 from multiprocessing import JoinableQueue
 from time import sleep
 import os.path
+import psutil
 
 # Custom Libraries
 from Engine import Engine
@@ -153,6 +154,12 @@ if __name__ == '__main__':
     except:
         sys.exit("Parsing of settings file \'%s\' failed.\n****Exiting****" % options.settings)
         
+
+    # Give ourselves high system priority:
+
+        # Lower the process priority
+    psutil.Process(os.getpid()).nice(psutil.REALTIME_PRIORITY_CLASS)
+
     # TO ADD: log levels for each type
     #do_err_email = read_config.GetStrElemVal(settings, "err_email",True) #To Add
     #do_err_post = read_config.GetStrElemVal(settings, "err_post",True) #To add
@@ -172,6 +179,8 @@ if __name__ == '__main__':
     logger.debug("Main logger ready.")
     sleep(1)
     
+
+
     # ========================
     # Setup Engine object
     # ========================

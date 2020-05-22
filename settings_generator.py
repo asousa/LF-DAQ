@@ -508,6 +508,11 @@ class MakeSettingsFile:
         logger.add_entry(_xml('PostLevel',self.config.get('Logger','PostLevel')))
         daq.add_entry(logger)
         
+        #Tdiff threshold values:
+        timing_limits = _xml('timing_limits','')
+        timing_limits.add_entry(_xml('td_upper', self.config.get('timing_limits','upper')))
+        timing_limits.add_entry(_xml('td_lower', self.config.get('timing_limits','lower')))
+        daq.add_entry(timing_limits)
 
         # Closing File
         fid = open(self.settings_name,'w')

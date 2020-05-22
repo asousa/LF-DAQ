@@ -4,7 +4,7 @@ from threading import Thread
 
 from multiprocessing import Queue, Process, get_logger
 from Queue import Full, Empty
-
+import psutil 
 from time import sleep
 import os
 from xml.dom.minidom import parse
@@ -27,12 +27,16 @@ class TaskManager:
     """
 
     def __init__(self, settings, log_queue):
-        self.Queue = Queue(10)  #process Queue
+        self.Queue = Queue(20)  #process Queue  # 10 -> 20 5/18/2020 APS
         self.MessageQueue = Queue(2)
         self.logger = DAQLogClient(log_queue, "TASKMAN")
         
         tm_process = Process(target=TM_Process, args=(settings,self.Queue,self.MessageQueue, log_queue))
         tm_process.daemon=True
+
+        # if os.name=='nt':
+        #     self.logger.info("setting below-normal priority to TaskManager")
+        #     psutil.Process(os.getpid()).nice(psutil.BELOW_NORMAL_PRIORITY_CLASS)
         tm_process.start()
         self.logger.info('Starting TaskManager on pid %d' % tm_process.pid)
 
@@ -56,8 +60,8 @@ class TaskManager:
 
 def TM_Process(settings,inQueue,outQueue, log_queue):
 
-    if os.name=='posix':
-        os.nice(2)  #decrease process priority
+    # Lower the process priority
+    psutil.Process(os.getpid()).nice(psutil.BELOW_NORMAL_PRIORITY_CLASS)
 
     TM = _TaskManager(settings, log_queue)
 

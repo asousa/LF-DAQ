@@ -183,7 +183,9 @@ class Engine:
         #self.gpsSettings = self.settings.GetSubTree("GpsClock")
         #self.daqSettings = self.settings.GetSubTree("DaqCard")
 
-        
+        self.td_lower = self.settings.GetIntElemVal('td_lower', 30000)
+        self.td_upper = self.settings.GetIntElemVal('td_upper',90000)
+        self.logger.status('timing limits %d, %d'%(self.td_lower, self.td_upper))
         # Generate modules from setting file
         #self.GenerateModules(settings)
         try:
@@ -207,8 +209,6 @@ class Engine:
         # Software version number
         self.__ver__ = __ver__
 
-        #self.station_name = read_config.GetStrElemVal(settings, "station_name",'X')
-        #self.station_id = read_config.GetStrElemVal(settings, "station_id",'XX')
         self.station_name = self.settings.GetStrElemVal("station_name",'X')
         self.station_id = self.settings.GetStrElemVal("station_id",'XX')
         self.lastLat = 0.0
@@ -743,6 +743,7 @@ class Engine:
                 raise ClockNoDataError('GPS returned None. Encountered timing issue?')
                 
             self.latest_timestamp = gpsData[1][0]   
+            # self.logger.status('GPS latest timestamp: %s'%self.latest_timestamp)
 
             return gpsData
        
@@ -750,7 +751,7 @@ class Engine:
     
     def GetDAQData(self):
         
-        self.logger.debug('SyncDAQData()')
+        self.logger.debug('GetDaqData()')
     
         if self.flags.is_running.is_set():
         
@@ -813,13 +814,10 @@ class Engine:
                 
             time_to_start_daq = clock()-tt
             self.logger.info('Time to start DAQ: %2.3fs; ' % time_to_start_daq)
-            
-            #make sure took ~1 second to get GPS
-            #self.gps.Flush()
-            #self.daq.Flush()
-            
+
+
+            # ---------- 1: Confirm we're getting 1 GPS message per second --------            
             time_to_get_gps = 0
-            
             while time_to_get_gps < .9 or time_to_get_gps > 1.1:
                 # Use GetGPSData to sync to serial timestamps
                 ttgps = clock()
@@ -828,12 +826,12 @@ class Engine:
                 self.logger.info('1st GPS @ %s' % t)
                 
                 time_to_get_gps = clock()-ttgps
-                self.logger.info('Sync1: Took %2.3fs to get GPS data ' % time_to_get_gps)
+                self.logger.info('Checking GPS message rate: Took %2.3fs to get GPS data ' % time_to_get_gps)
 
-            ttgps = clock()
+            ttgps = clock()  # Store the time of our last GPS message
             num_daq = 0 # counts how many daq samples we got back
 
-            #make sure next DAQ in ~1 second
+            # ---------- 2: Confirm we're getting 1 DAQ message per second --------            
             time_to_get_data = 0
             while time_to_get_data < .9:
                 # This loop uses GetDAQData to make sure 1 data series is returned every 1 second
@@ -843,56 +841,30 @@ class Engine:
                 self.logger.info('DAQ @ %s' % t)
                 
                 time_to_get_data = clock()-ttdaq 
-                self.logger.info('Sync2 Took %2.3fs to get DAQ data ' % time_to_get_data)
+                self.logger.info('Checking DAQ message rate: Took %2.3fs to get DAQ data ' % time_to_get_data)
 
                 if time_to_get_data > 1.1:
                     raise EngineError("DAQ timing out of range, restarting engine.")
                     
                 num_daq += 1
                 
-            #We think we have a synced setup now
-            tt = clock()
+            tt = clock() # Store the time of our last DAQ message
 
-            # Remove all the GPS strings queued up while doing DAQ sync
-            number_gps_to_pop = int(round(tt-ttgps-1.0))
-            
-            if number_gps_to_pop < num_daq-1:
-                #num_daq usually = 2, but sometimes, for some reason, tt-ttgps yields 0
-                number_gps_to_pop = num_daq-1
-            
-            self.logger.info('Popping %d from gps to sync' % number_gps_to_pop)
-            for tmpi in xrange(number_gps_to_pop):
+            # We think we have a synced setup now
+            # Clear any extra GPS entries from the buffer, which accumulated during timing check
+            self.logger.info('Popping %d entries from GPS queue'%(num_daq - 1))
+            for tmpi in xrange(num_daq - 1):
                 t,d = self.GetGPSData()
                 self.logger.info('Popping GPS @ %s' % t)
-            
-            #First check next GPS comes in at right time, next one doesn't come too soon        
+
+            # ---------- 3: Confirm both GPS and DAQ data are in sync with each other --------            
+            tt = clock()    
             t,d = self.GetGPSData()
-            self.logger.info('3rd GPS @ %s' % t)
-            
-            self.lastStartTime = self.latest_timestamp
             time_to_get_gps2 = clock()-tt
-
-            if have_lock:
-                if self.daq.sampleRate > 100000:   
-                    #Max seen is 0.501
-                    tdiff = 0.51
-                    if time_to_get_gps2 > tdiff:
-                        raise ClockError("'Took too long to get GPS timestamp in queue (%2.3fs)" % time_to_get_gps2)
-                    
-                else:
-                    tdiff = 0.3
-                    
-                    if time_to_get_gps2 > tdiff:
-                        raise ClockError("'Took too long to get GPS timestamp in queue (%2.3fs)" % time_to_get_gps2)
-
-                    sleep((1-tdiff)-time_to_get_gps2)
-                    if self.gps.GetQueueSize() > 0:
-                        raise ClockError("Extra GPS timestamp in queue")
-            else:
-                sleep(.1)
-                self.gps.Flush()
-
-            #next check if DAQ comes in at right time
+            self.lastStartTime = self.latest_timestamp
+            self.logger.info('2nd GPS @ %s' % t)
+            self.logger.info('Time to get GPS2: %s' % time_to_get_gps2)
+            
             t,d = self.GetDAQData()
             self.logger.info('Next DAQ @ %s' % t)
             
@@ -1169,91 +1141,29 @@ class Engine:
                         # I5, 8GB, Moto GPS on serial port with PCI DAQ 2ch: diff ~= 0.51s
                         # I5, 8GB, Moto GPS with onboard usb serial, USB DAQ 3ch: 0.37 < diff < 0.52
                         # C2Duo 3GHz, 8GB, Moto GPS on USB, USB DAQ 3ch:   ~.16 < diff < .2
+                        # Currently ~0.5s on the Relampago laptops, VLF receiver.
                         
                         tdiff = tdaq - tgps
-                        # tdiff = abs(tdiff) # APS 5.2018
-                        #self.logger.debug("tdaq=%s; tgps=%s" % (tdaq, tgps))
-                        #self.logger.debug("tdiff: %s" % tdiff)
-                        #self.logger.info("tdaq=%s; tgps=%s; tdiff=%s" % (tdaq, tgps, tdiff))
-                        #self.logger.debug("tdaq=%s; tgps=%s; tdiff=%s" % (tdaq, tgps, tdiff))
+
                         self.logger.debug("tdiff=%s" % (tdiff))
                         td = (tdiff.microseconds+tdiff.seconds*10**6)
-                        
-                        if self.sampleRate > 100000:
-                            
-                            # Set tighter timing constraints for LF
-                            if td<300000 or td>1020000:
-                                self.logger.warning("tdaq=%s; tgps=%s; tdiff=%s" % (tdaq, tgps, tdiff))
-                            
-                            if  (td<1200000 and td>150000):
-#                            if  (td<1200000 and td>50000):   #APS 5.2018
-                                self.CheckDebugFiles()
 
-                                self.lastLat = gpsData[1][1][0]
-                                self.lastLon = gpsData[1][1][1]
-
-                                # Process the DAQ and GPS data
-                                self.ppt.Process([daqData[1], gpsData[1], self.sampleRate])    
-                                
-                                #self.llog.log(self.latest_timestamp)
-                            
-                            else:
-                                raise EngineError("DAQ and GPS data not sync'd properly. Tdiff: %s" % tdiff)
-                        else:
-                        
-                            # Set timing constraints for VLF - avg around 0.520s
-                            # Core i7 is at 0.875
-                            if td<300000 or td>900000:
-                                self.logger.warning("tdaq=%s; tgps=%s; tdiff=%s" % (tdaq, tgps, tdiff))
-                            
-                            if  (td<900000 and td>400000):
-                        
-                                self.CheckDebugFiles()
-
-                                self.lastLat = gpsData[1][1][0]
-                                self.lastLon = gpsData[1][1][1]
-
-                                # Process the DAQ and GPS data
-                                self.ppt.Process([daqData[1], gpsData[1], self.sampleRate])    
-                                
-                                #self.llog.log(self.latest_timestamp)
-                            
-                            else:
-                                raise EngineError("DAQ and GPS data not sync'd properly. Tdiff: %s" % tdiff)
+                        if  (td>self.td_lower and td<self.td_upper):
                     
+                            self.CheckDebugFiles()    # Appears to be an unused message passing system (5/22/20 APS)
+                                                            
+                            self.lastLat = gpsData[1][1][0]
+                            self.lastLon = gpsData[1][1][1]
+
+                            # Process the DAQ and GPS data
+                            self.ppt.Process([daqData[1], gpsData[1], self.sampleRate])    
+                                                    
+                        else:
+                            self.logger.warning("tdaq=%s; tgps=%s; tdiff=%s" % (tdaq, tgps, tdiff))
+                            raise EngineError("DAQ and GPS data not sync'd properly.")
+                
                     else:
                         raise EngineError("GPS or DAQ returned None.")
-                    
-                    #########################
-                    ###### FOR TESTING ######
-                    #########################
-                    """
-                    # Uncomment these line for testing
-                    test_run += 1
-                    
-                    if test_run == 20:
-                        err_num = random.randint(1, 7)
-                        #err_num = 7
-                        self.logger.debug('fake error=%d' % err_num)
-                        
-                        test_run = 0
-                        if err_num == 1:
-                            raise DAQError("Simulating: DAQError")
-                        elif err_num == 2:
-                            raise DAQNoDataError("Simulating: DAQNoDataError")
-                        elif err_num == 3:
-                            raise ClockError("Simulating: ClockError")
-                        elif err_num == 4:
-                            raise ClockSkipError("Simulating: ClockSkipError")
-                        elif err_num == 5:
-                            raise ClockNoDataError("Simulatingg: ClockNoData")
-                        elif err_num == 6:
-                            raise ClockQueueFull("Simulating: ClockQueueFull")
-                        elif err_num == 7:
-                            raise EngineError("Simulating: EngineError")
-                    """   
-
-                        
 
                 # Acquisition stopped 
                 #self.llog.logend(self.latest_timestamp)
@@ -1356,10 +1266,6 @@ class Engine:
 
                     # Noticed that on GPS errors (no data - maybe a tick skip)
                     #  want to wait a small amount of time 
-                    # self.logger.info('Waiting 60 seconds before restart.')
-                    # sleep(60.0 + random.random())
-                    # self.logger.info("Waiting 60 more.")
-                    # sleep(60.0 + random.random())
                     self.logger.info('Waiting 10 seconds before restart.')
                     sleep(10.0 + random.random())
                     

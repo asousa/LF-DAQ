@@ -9,8 +9,10 @@ NumChannels=2
 #DAQ card
 DevName=Dev5
 SampleRate=100000
+
+# 0 for falling edge, 1 for rising edge
 SampleClockPolarity=1
-StartTriggerPolarity=1
+StartTriggerPolarity=0
 SingleEndedInput=0
 
 #GPS type: M (Motorola) or T (Truetime)
@@ -55,7 +57,7 @@ post_server=http://vlf-engineering.stanford.edu/field_sites_uploads/upload_file.
 #--------
 [Cleanup]
 #--------
-active=0
+active=1
 
 #Pacman days (if active)
 cleanup_cont_days = 1
@@ -68,18 +70,18 @@ cleanup_spec_days=5
 #-----------------
 [Copy_To_External]
 #-----------------
-active=1
+active==1
 
 #External drive path (if active)
-# This can be a comma-separated list of drives
+#This can be a comma-separated list of drives
 external_drive=D:\,E:\
 
 #--------------
 [BBFileWriters]
 #--------------
 Continuous=1
-ContinuousDuration=300
-Synoptic=0
+ContinuousDuration=900
+Synoptic=1
 SynopticPeriod=3600
 SynopticDuration=60
 Snapshot=0
@@ -88,7 +90,7 @@ Snapshot=0
 [Narrowband]
 #------------
 active=1
-call_signs=NWC,NPM,NLK,NAA,NML,DHO,JJI
+call_signs=NLK,NAA,NML
 
 #------------
 [Spectrogram]
@@ -100,7 +102,7 @@ period=1800
 NFFT=1024
 fmax=40
 cmin=-50
-cmax=30
+cmax=40
 remove_hum=0
 f0=60
 hum_fc=4000
@@ -128,9 +130,9 @@ gps_sn=.
 #------
 LogDir=log/
 ErrorEmail=0
-ErrorEmailTo=<your_email_here>
-ErrorEmailFrom=<your_email_here>
-ErrorEmailPw=<your_very_insecure_password_here>
+ErrorEmailTo=[your_email_here]
+ErrorEmailFrom=[your_email_here]
+ErrorEmailPw=[your_very_insecure_password_here]
 
 # Server to post log messages to -- this is
 # how it worked at Stanford, but you might
@@ -141,7 +143,7 @@ LogPostServer=vlf-engineering.stanford.edu:80
 
 # Verbosity for console, logfiles, and HTTP Post
 ConsoleLevel=TIMESTAMP
-LogFileLevel=TIMESTAMP
+LogFileLevel=DEBUG
 PostLevel=WARNING
   
 
@@ -156,5 +158,18 @@ PostLevel=WARNING
 # If tail_only=1, copy just the last ~50 lines of the log file.
 active=0
 tail_only=0
-dropbox_dir=C:\<path\to\dropbox>
+dropbox_dir=C:\Users\lair\Dropbox\logs
 copy_period=1800
+
+#-----------------
+[timing_limits]
+#-----------------
+# These are the threshold values, in microseconds, which we use to
+# line up data from the GPS card and the DAQ. Since it's measured by the 
+# system clock, it will vary from machine to machine, and VLF to LF.
+# The target time should be about 0.5 seconds. Too tight limits
+# will cause dropouts that would otherwise be fine; too loose limits
+# will cause repeated GPS errors. Fiddle with these values if you're
+# getting dropouts with "tdiff=" exceptions.
+lower = 300000
+upper = 900000 
