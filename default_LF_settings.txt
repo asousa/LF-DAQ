@@ -71,6 +71,7 @@ cleanup_spec_days=5
 active=1
 
 #External drive path (if active)
+#This can be a comma-separated list of drives
 external_drive=D:\,E:\
 
 #--------------
@@ -111,10 +112,10 @@ quality=75
 [Station_Notes]
 #---------------
 # (Please actually put this in)
-station_description=Station Name
+station_description=CU LF Receiver
 hardware_description=LF Receiver
 antenna_bearings=.
-antenna_description=Antenna Description
+antenna_description=.
 install_date=.
 contact_info=.
 adc_type=.
@@ -129,10 +130,16 @@ LogDir=log/
 ErrorEmail=0
 ErrorEmailTo=[your_email_here]
 ErrorEmailFrom=[your_email_here]
-ErrorEmailPw=[your_password_here]
+ErrorEmailPw=[your_very_insecure_password_here]
+
+# Server to post log messages to -- this is
+# how it worked at Stanford, but you might
+# not have a machine set up to receive.
 ErrorPost=0
 LogPostUrl=/field_sites_logs/logging.php
 LogPostServer=vlf-engineering.stanford.edu:80
+
+# Verbosity for console, logfiles, and HTTP Post
 ConsoleLevel=TIMESTAMP
 LogFileLevel=TIMESTAMP
 PostLevel=WARNING

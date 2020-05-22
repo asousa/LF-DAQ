@@ -1,7 +1,8 @@
 # LF receiver calibration script
 # Austin Sousa, 5/25/2018
 from __future__ import division # stop casting to int every time we divide, jesus christ Python
-# import Tkinter, tkFileDialog
+import Tkinter
+import tkFileDialog
 import matplotlib
 matplotlib.use("TkAgg")
 import numpy as np
@@ -9,7 +10,7 @@ import matplotlib.pyplot as plt
 from scipy import signal
 from scipy.io import loadmat, savemat
 from scipy.ndimage.filters import gaussian_filter1d
-
+import datetime
 
 from scipy.interpolate import interp1d
 import os
@@ -138,7 +139,8 @@ def plot_frequency_response(FR_NS, FR_EW):
     ax[1].set_xlabel('Frequency (kHz)')
     ax[1].grid('on', which='both', alpha=0.5)
 
-    ax[1].set_xlim([0, 500])
+
+    # ax[1].set_xlim([0, 500])
     
     fig.tight_layout()
     fig.show()
@@ -169,6 +171,8 @@ def plot_calibration_number(CA_NS, CA_EW):
     axb = ax[0].twinx()
     axb.plot(CA_NS[:,0], CA_NS[:,1]*pow(2,16)*1e-6)
     axb.set_ylabel('Saturation level\n($\mu$T)')
+    ylims = np.array(ax[0].get_ylim())
+    axb.set_ylim(ylims*pow(2,16)*1e-6)
     ax[1].plot(CA_EW[:,0], CA_EW[:,1])
     ax[1].set_title('EW Calibration Number')
     ax[1].set_ylabel('Calibration Number\n(pT/increment)')
@@ -177,8 +181,9 @@ def plot_calibration_number(CA_NS, CA_EW):
     axc = ax[1].twinx()
     axc.plot(CA_EW[:,0], CA_EW[:,1]*pow(2,16)*1e-6)
     axc.set_ylabel('Saturation level\n($\mu$T)')
-    ax[1].set_xlim([0, 500])
-    
+    # ax[1].set_xlim([0, 500])
+    ylims = np.array(ax[1].get_ylim())
+    axc.set_ylim(ylims*pow(2,16)*1e-6)
     fig.tight_layout()
     fig.show()
     # fig.savefig('CalibrationNumber.pdf')
@@ -210,7 +215,7 @@ def plot_response_ratio(freq_axis, response_ratio):
     ax.set_xlabel('Frequency (kHz)')
     ax.grid('on', which='both', alpha=0.5)
     ax.set_title('Channel Calibration Response Ratio')
-    ax.set_xlim([0,500])
+    # ax.set_xlim([0,500])
     fig.tight_layout()
     fig.show()
     # fig.savefig('ResponseRatio.pdf')
@@ -242,21 +247,22 @@ def plot_noise_floor(noise_NS, noise_EW):
     # --------------- Latex Plot Beautification --------------------------
     
     fig, ax = plt.subplots(2,1, sharex=True, sharey=True)
-    ax[0].plot(noise_NS[:,0], 10*np.log10(noise_NS[:,1]))
+    ax[0].plot(noise_NS[:,0], 10*np.log10(noise_NS[:,1]), label='System noise')
     ax[0].set_title('NS Channel Noise Response')
     ax[0].set_ylabel('Noise Level\ndB-pT/$\sqrt{Hz}$')
     ax[0].grid('on', which='both', alpha=0.5)
-    ax[0].plot(atmo_freqs, atmo_vals)
-    
-    ax[1].plot(noise_EW[:,0], 10*np.log10(noise_EW[:,1]))
+    ax[0].plot(atmo_freqs, atmo_vals, label='Natural VLF noisefloor')
+    ax[0].legend()
+
+    ax[1].plot(noise_EW[:,0], 10*np.log10(noise_EW[:,1]),label='System noise')
     ax[1].set_title('EW Channel Noise Response')
     ax[1].set_ylabel('Noise Level\ndB-pT/$\sqrt{Hz}$')
     ax[1].set_xlabel('Frequency (kHz)')
     ax[1].grid('on', which='both', alpha=0.5)
-    ax[1].plot(atmo_freqs, atmo_vals)
-    
+    ax[1].plot(atmo_freqs, atmo_vals, label='Natural VLF noisefloor')
+    ax[1].legend()
     ax[1].set_ylim([-80, -20])
-    ax[1].set_xlim([0, 500])
+    # ax[1].set_xlim([0, 500])
     fig.tight_layout()
     # fig.show()
     # fig.savefig('NoiseResponse.pdf')
@@ -268,6 +274,7 @@ def calibrate_2ch(file1, file2):
 
     # ----------- Load data from matlab file dicts -----------
     Fs = file1['Fs']
+    is_LF = (Fs > 100000)
     data1 = np.array(file1['data'])
     data2 = np.array(file2['data'])
     tvec = np.linspace(0, len(data1)-1,len(data1))/Fs
@@ -281,20 +288,35 @@ def calibrate_2ch(file1, file2):
     # noise_start_sec = 30
 
     # We're just downsampling by ~1000, smoothing it with a Gaussian filter, and finding the peak.
-
-    ds_factor = 1000
-    ds1 = data1[::ds_factor]
-    ds2 = gaussian_filter1d(np.abs(ds1), sigma=ds_factor, axis=-1)
-    max_ind = np.argmax(ds2)
-    caltone_center_ind = max_ind*ds_factor
-
-    if max_ind < len(ds1)/2:
-        noise_center_ind = int(len(ds1) + max_ind)/2*ds_factor
+    if is_LF:
+        print('LF data detected')
     else:
-        noise_center_ind = (max_ind/2)*ds_factor
+        print('VLF data detected')
+    caltone_start_sec = raw_input('Caltone start time, in seconds [none to autodetect]:') or None
 
-    caltone_start_sec = caltone_center_ind/Fs
-    noise_start_sec = noise_center_ind/Fs
+    if caltone_start_sec is None:
+        if is_LF:
+            ds_factor = 1000
+        else:
+            ds_factor = 100
+        ds1 = data1[::ds_factor]
+        ds2 = gaussian_filter1d(np.abs(ds1), sigma=ds_factor, axis=-1)
+        max_ind = np.argmax(ds2)
+        caltone_center_ind = max_ind*ds_factor
+        caltone_start_sec = caltone_center_ind/Fs
+    else:
+        caltone_start_sec = int(caltone_start_sec)
+
+    noise_start_sec = raw_input('Noise start time, in seconds [none to autodetect]:') or None
+
+    if noise_start_sec is None:
+        if max_ind < len(ds1)/2:
+            noise_center_ind = int(len(ds1) + max_ind)/2*ds_factor
+        else:
+            noise_center_ind = (max_ind/2)*ds_factor
+        noise_start_sec = noise_center_ind/Fs
+    else:
+        noise_start_sec = int(noise_start_sec)
     print "Caltone at %g sec"%caltone_start_sec
     print "Noise floor at %g sec"%noise_start_sec
 
@@ -317,10 +339,10 @@ def calibrate_2ch(file1, file2):
     # Get the antenna properties:
 
     
-    geom = raw_input('Antenna geometry? (square or tri): ')
-    ant_AWG = int(raw_input('Antenna AWG: '))
-    ant_baseline = float(raw_input('Antenna baseline (cm): ')) # cm
-    Na = int(raw_input('Antenna number of turns: '))
+    geom = raw_input('Antenna geometry? (square or tri) [default: tri]: ') or 'tri'
+    ant_AWG = int(raw_input('Antenna AWG [default 16]: ') or 16)
+    ant_baseline = float(raw_input('Antenna baseline (cm) [default 260]:') or 260) # cm
+    Na = int(raw_input('Antenna number of turns [default 13]: ') or 13)
     # geom = 'square'
     # ant_AWG = 18
     # ant_baseline = 81 # cm
@@ -338,10 +360,9 @@ def calibrate_2ch(file1, file2):
     # ----------- Caltone parameters ----------------
     # Caltone parameters:
     m = pow(2.0,10) - 1;
-    # You should detect this!
-    # FrequencySpacing1 = (10.24e6/4)/m # LF version 1.0
-    # FrequencySpacing2 = (10.24e6/4)/m # LF version 1.0
-    #FrequencySpacing = (10.00e6/4)/m # LF version 1.1 and on
+
+    # FrequencySpacing = (10.24e6/4)/m # LF version 1.0
+    # FrequencySpacing = (10.00e6/4)/m # LF version 1.1 and on
 
     Rcal = 10000  # Rcal - calibration injection resistance
     Rd = 1        # Dummy loop resistance, ohms
@@ -363,7 +384,14 @@ def calibrate_2ch(file1, file2):
     # Try it for all possible caltones (some cards use 10.24MHz, some use 10.0MHz.)
     # We validate the caltone by finding a smooth gradient between peaks, with substantial amplitude
 
-    for spacing in [10.00e6/4/m, 10.24e6/4/m]:
+    if is_LF:
+        # LF cards -- There's at least two versions, depending on what chip is on the preamp cards
+        potential_spacings =  [10.00e6/4/m, 10.24e6/4/m]
+    else:
+        # VLF cards -- I think they're all like this (~250.244 Hz)
+        potential_spacings = [10.24e5/4/m]
+
+    for spacing in potential_spacings:
         FrequencySpacing1 = spacing
         NFFT1 = int(round(1000/FrequencySpacing1*Fs*caltone_length))
         caltonefft1 = np.fft.fft(cal1,NFFT1)
@@ -375,7 +403,7 @@ def calibrate_2ch(file1, file2):
             print "Found caltone 1 with spacing %1.2e Hz"%(spacing*4*m)
             break
 
-    for spacing in [10.00e6/4/m, 10.24e6/4/m]:
+    for spacing in potential_spacings:
         FrequencySpacing2 = spacing
         NFFT2 = int(round(1000/FrequencySpacing2*Fs*caltone_length))
         caltonefft2 = np.fft.fft(cal2,NFFT2)
@@ -393,12 +421,9 @@ def calibrate_2ch(file1, file2):
     print "Calculating noise PSD..."
     nperseg = int(len(noise1)/200)
     noverlap = nperseg/2
+
     window = signal.get_window('hamming', nperseg)
     noisefreqs, noise_spectrum_1 = signal.welch(noise1, nperseg = nperseg, window = window, noverlap = noverlap, fs = int(Fs))
-
-    # nperseg = int(len(noise2)/200)
-    # noverlap = nperseg/2
-    window = signal.get_window('hamming', nperseg)
     noisefreqs, noise_spectrum_2 = signal.welch(noise2, nperseg = nperseg, window = window, noverlap = noverlap, fs = int(Fs))
     
     
@@ -411,8 +436,8 @@ def calibrate_2ch(file1, file2):
     Bcal = Vcal*(Za+Zp)/(1j*Omega*Na*Aa)/(2*Rcal+Zd*Zp/(Zd+Zp))*1E12
     CorrectionFactor = Bcal/Bcal_Nominal
 
-    # freq_vec = np.arange(0, 200*FrequencySpacing1/1000 - 1, FrequencySpacing1/1000)
-    freq_vec = np.arange(0, Fs/2./1000. +1 , 1)
+
+    freq_vec = np.linspace(0,Fs/2./1000., 501)
     response1_raw = peakvals1/pow(2,16)*10*1000/Bcal/len(cal1)*2  # Allegedly: mV(output)/pT(input)
     response2_raw = peakvals2/pow(2,16)*10*1000/Bcal/len(cal2)*2
 
@@ -431,8 +456,8 @@ def calibrate_2ch(file1, file2):
 
     noiseresponse1 = noiseresponse1*pow(Bcal_int/peakvals1_int*Fs,2)
     noiseresponse2 = noiseresponse2*pow(Bcal_int/peakvals2_int*Fs,2)
+
     # ------- Create output variables ------------
-   
     FrequencyResponseNS = np.stack([freq_vec, response1]).T
     FrequencyResponseEW = np.stack([freq_vec, response2]).T
 
@@ -467,44 +492,66 @@ if __name__ == '__main__':
         - Output some plots
         - Output CalibrationVariables.mat, so your spectrograms will be scaled appropriately!
     '''
-    # import Tkinter, tkFileDialog
 
-    # print "Please open the Matlab file containing the calibration tone:"
+    print("Please open the Matlab file containing the calibration tone:")
 
-    # root = Tkinter.Tk()
-    # root.withdraw()
-    # file_path = tkFileDialog.askopenfilename()
+    root = Tkinter.Tk()
+    root.withdraw()
+    file_name = tkFileDialog.askopenfilename()
 
-    # file_name = file_path.split()[1]
-    # file_path = file_path.split()[0]
+    # # Some setup to use the WX file dialogs:
+    # app = wx.App(redirect=False)
+    # frame = wx.Frame(None, -1, 'win.py')
+    # frame.SetDimensions(0,0,200,50)
 
+    # # Create open file dialog
+    # openFileDialog = wx.FileDialog(frame, "Open", "", "", "Matlab files (*.mat)|*.mat", 
+    #         wx.FD_OPEN | wx.FD_FILE_MUST_EXIST)
+
+    # outDirDialog = wx.DirDialog(frame,"Open","",
+    #         wx.DD_DEFAULT_STYLE | wx.DD_DIR_MUST_EXIST)
+
+    # openFileDialog.ShowModal()
+    # file_name = openFileDialog.GetPath()
     # Load the input files:
-    file_path = '.'
-    file_name = sys.argv[1]
-    fn1 = file_name.split('_')[0] + '_000.mat'
-    fn2 = file_name.split('_')[0] + '_001.mat'
+    # file_path = '.'
+    # file_name = sys.argv[1]
+    fn1 = file_name[0:-8] + '_000.mat'
+    fn2 = file_name[0:-8] + '_001.mat'
 
-    file1 = loadmat(os.path.join(os.path.split(file_path)[0],fn1), squeeze_me = True)
-    file2 = loadmat(os.path.join(os.path.split(file_path)[0],fn2), squeeze_me = True)
+    print('file 1: %s'%fn1)
+    print('file 2: %s'%fn2)
+    file1 = loadmat(fn1, squeeze_me = True)
+    file2 = loadmat(fn2, squeeze_me = True)
 
     # Run the calibration function
     caldict = calibrate_2ch(file1, file2)
 
-    # Save it:
-    savemat('CalibrationVariables',caldict, format='4')
+    print('Please select an output directory:')
+    outpath = tkFileDialog.askdirectory()
+
+    # outDirDialog.ShowModal()
+    # outpath = outDirDialog.GetPath()
 
     # Plot it!
     fig, ax = plot_frequency_response(caldict['FrequencyResponseNS'], caldict['FrequencyResponseEW'])
-    fig.savefig(os.path.join(file_path, 'CalibrationResponse.pdf'))
+    fig.savefig(os.path.join(outpath, 'CalibrationResponse.pdf'))
 
     fig, ax = plot_noise_floor(caldict['NoiseResponseNS'],caldict['NoiseResponseEW'])
-    fig.savefig(os.path.join(file_path, 'NoiseResponse.pdf'))
+    fig.savefig(os.path.join(outpath, 'NoiseResponse.pdf'))
 
     fig, ax = plot_calibration_number(caldict['CalibrationNumberNS'], caldict['CalibrationNumberEW'])
-    fig.savefig(os.path.join(file_path, 'CalibrationNumber.pdf'))
+    fig.savefig(os.path.join(outpath, 'CalibrationNumber.pdf'))
 
     fig, ax = plot_response_ratio(caldict['FrequencyResponseNS'][:,0], caldict['ResponseRatio'])
-    fig.savefig(os.path.join(file_path, 'ResponseRatio.pdf'))
+    fig.savefig(os.path.join(outpath, 'ResponseRatio.pdf'))
 
-    raw_input('press any key to exit')
+    notes = raw_input('Any additional metadata (site name, calibration description, etc): ')
+
+    caldict['notes'] = notes
+    caldict['date_created'] = datetime.datetime.utcnow().isoformat()
+    # Save it:
+    savemat(os.path.join(outpath,'CalibrationVariables'),caldict, format='4')
+
+    raw_input('press return key to exit')
 
