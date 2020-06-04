@@ -156,18 +156,8 @@ if __name__ == '__main__':
         
 
     # Give ourselves high system priority:
-
-        # Lower the process priority
     psutil.Process(os.getpid()).nice(psutil.REALTIME_PRIORITY_CLASS)
 
-    # TO ADD: log levels for each type
-    #do_err_email = read_config.GetStrElemVal(settings, "err_email",True) #To Add
-    #do_err_post = read_config.GetStrElemVal(settings, "err_post",True) #To add
-    #log_dir = read_config.GetStrElemVal(settings, "log_dir", 'log\\') #To Add
-
-    #station_name = read_config.GetStrElemVal(settings, "station_name",'Tester')
-    #station_id = read_config.GetStrElemVal(settings, "station_id",'SUA')
-    
     # ========================
     # Setup Logger
     # ========================
