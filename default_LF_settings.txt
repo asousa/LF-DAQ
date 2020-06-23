@@ -88,7 +88,10 @@ Snapshot=0
 [Narrowband]
 #------------
 active=0
-call_signs=NWC,NPM,NLK,NAA,NML,DHO,JJI
+do_sph=0
+do_low_res=1
+
+call_signs=NLK,NAA,NML
 
 #------------
 [Spectrogram]

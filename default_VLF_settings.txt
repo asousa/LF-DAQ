@@ -2,8 +2,8 @@
 #------
 [Basics]
 #------
-station_id=MM
-station_name=Bob's House
+station_id=XX
+station_name=site_name
 NumChannels=2
 
 #DAQ card
@@ -90,6 +90,9 @@ Snapshot=0
 [Narrowband]
 #------------
 active=1
+do_sph=0
+do_low_res=1
+
 call_signs=NLK,NAA,NML
 
 #------------

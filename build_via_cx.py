@@ -60,7 +60,8 @@ execs = [Executable('main.py',icon='lair_icon.ico'),
          Executable('SerialChecker.py',icon='lair_icon.ico'),
          Executable('settings_generator.py',icon='lair_icon.ico'),
          Executable('GUI.py', base='Win32GUI',icon='lair_icon.ico'),
-         Executable('calibrate_LF.py',icon='lair_icon.ico')]
+         Executable('calibrate_LF.py',icon='lair_icon.ico'),
+         Executable('offline_process.py', icon='lair_icon.ico')]
 
         
 # Set output build path:
@@ -117,7 +118,6 @@ subprocess.call('copy default_LF_settings.txt %s\settings_LF.txt'%build_dir, she
 subprocess.call('copy default_VLF_settings.txt %s\settings_VLF.txt'%build_dir, shell=True)
 subprocess.call('copy DaqSettings.xml %s\DaqSettings.xml'%build_dir, shell=True)
 subprocess.call('copy nb.conf %s\nb.conf'%build_dir, shell=True)
-print('copy filter_taps.txt %s\\filter_taps.txt'%build_dir)
 subprocess.call('copy filter_taps.txt %s\\filter_taps.txt'%build_dir, shell=True)
 
 
@@ -139,6 +139,9 @@ with open(os.path.join(build_dir,"Make_DaqSettings_for_LF.bat"),'w') as f:
 with open(os.path.join(build_dir,"Make_DaqSettings_for_VLF.bat"),'w') as f:
     f.write('%s --c=settings_VLF.txt --f=DaqSettings.xml\n'%os.path.join('software','settings_generator.exe'))
     f.write('\npause\n')
+
+with open(os.path.join(build_dir,"OfflineProcess.bat"),'w') as f:
+    f.write('start "VLF_DAQ (Offline mode)" /realtime %s --settings=DaqSettings.xml' % os.path.join('software','offline_process.exe'))
 
 with open(os.path.join(build_dir,'Calibration.bat'),'w') as f:
     f.write('%s'%os.path.join('software','calibrate_LF.exe'))

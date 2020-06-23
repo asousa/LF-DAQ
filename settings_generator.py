@@ -443,8 +443,10 @@ class MakeSettingsFile:
                         pp.add_entry(_xml('DirectoryRoot1','Narrowband'))
                 else:
                     pp.add_entry(_xml('DirectoryRoot',os.path.join(DataRootFolder,'Narrowband')))
-                pp.add_entry(_xml('do_sph_chan',1))
-                pp.add_entry(_xml('do_low_res',1))
+                do_sph = int(self.config.get('Narrowband','do_sph'))
+                do_low_res = int(self.config.get('Narrowband','do_low_res'))
+                pp.add_entry(_xml('do_sph_chan',do_sph))
+                pp.add_entry(_xml('do_low_res',do_low_res))
                 pp.add_entry(_xml('Duration',86400))
                 pp.add_entry(_xml('call_sign',self.config.get('Narrowband','call_signs')))
                 pp.add_entry(_xml('call_sign_file','nb.conf'))

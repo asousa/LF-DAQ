@@ -1,13 +1,13 @@
-<!-- Settings generated at 2020-06-19 21:34:19.347000 [UTC] by settings_generator -->
+<!-- Settings generated at 2020-06-23 21:15:03.967000 [UTC] by settings_generator -->
 
 <DaqConfiguration>
 	<StationSettings>
-		<station_id>MM</station_id>
-		<station_name>Bob's House</station_name>
-		<IsLF>0</IsLF>
+		<station_id>XX</station_id>
+		<station_name>site_name</station_name>
+		<IsLF>1</IsLF>
 		<IsResettable>0</IsResettable>
-		<station_description>CU VLF Receiver</station_description>
-		<hardware_description>VLF Receiver</hardware_description>
+		<station_description>CU LF Receiver</station_description>
+		<hardware_description>LF Receiver</hardware_description>
 		<antenna_bearings>.</antenna_bearings>
 		<antenna_description>.</antenna_description>
 		<install_date>.</install_date>
@@ -22,8 +22,8 @@
 		<StartTriggerName>PFI0</StartTriggerName>
 		<SampleClockPolarity>1</SampleClockPolarity>
 		<StartTriggerPolarity>0</StartTriggerPolarity>
-		<SampleRate>100000</SampleRate>
-		<DevName>Dev5</DevName>
+		<SampleRate>1000000</SampleRate>
+		<DevName>Dev1</DevName>
 		<NumChannels>2</NumChannels>
 		<SingleEndedInput>0</SingleEndedInput>
 	</DaqCard>
@@ -35,34 +35,6 @@
 		<ComPortNumber>3</ComPortNumber>
 	</GpsClock>
 	<TaskManagerSettings>
-		<Task module="Cleanup">
-			<Directory>Continuous</Directory>
-			<Interval>3600</Interval>
-			<StartTime>00:00</StartTime>
-			<EndTime>23:59</EndTime>
-			<DataLifetime>1</DataLifetime>
-		</Task>
-		<Task module="Cleanup">
-			<Directory>Synoptic</Directory>
-			<Interval>3600</Interval>
-			<StartTime>00:00</StartTime>
-			<EndTime>23:59</EndTime>
-			<DataLifetime>5</DataLifetime>
-		</Task>
-		<Task module="Cleanup">
-			<Directory>Spectrogram</Directory>
-			<Interval>3600</Interval>
-			<StartTime>00:00</StartTime>
-			<EndTime>23:59</EndTime>
-			<DataLifetime>5</DataLifetime>
-		</Task>
-		<Task module="Cleanup">
-			<Directory>Narrowband</Directory>
-			<Interval>3600</Interval>
-			<StartTime>00:00</StartTime>
-			<EndTime>23:59</EndTime>
-			<DataLifetime>5</DataLifetime>
-		</Task>
 		<Task module="CopyFiles">
 			<Directory>Continuous</Directory>
 			<Interval>1800</Interval>
@@ -74,16 +46,6 @@
 			<WriteDirectory2>F:\Continuous</WriteDirectory2>
 		</Task>
 		<Task module="CopyFiles">
-			<Directory>Synoptic</Directory>
-			<Interval>1800</Interval>
-			<Delete>1</Delete>
-			<StartTime>00:00</StartTime>
-			<EndTime>23:59</EndTime>
-			<WriteDirectory0>D:\Synoptic</WriteDirectory0>
-			<WriteDirectory1>E:\Synoptic</WriteDirectory1>
-			<WriteDirectory2>F:\Synoptic</WriteDirectory2>
-		</Task>
-		<Task module="CopyFiles">
 			<Directory>Spectrogram</Directory>
 			<Interval>1800</Interval>
 			<Delete>1</Delete>
@@ -92,16 +54,6 @@
 			<WriteDirectory0>D:\Spectrogram</WriteDirectory0>
 			<WriteDirectory1>E:\Spectrogram</WriteDirectory1>
 			<WriteDirectory2>F:\Spectrogram</WriteDirectory2>
-		</Task>
-		<Task module="CopyFiles">
-			<Directory>Narrowband</Directory>
-			<Interval>1800</Interval>
-			<Delete>1</Delete>
-			<StartTime>00:00</StartTime>
-			<EndTime>23:59</EndTime>
-			<WriteDirectory0>D:\Narrowband</WriteDirectory0>
-			<WriteDirectory1>E:\Narrowband</WriteDirectory1>
-			<WriteDirectory2>F:\Narrowband</WriteDirectory2>
 		</Task>
 		<Task module="CopyFiles">
 			<Filename>DaqSettings.xml</Filename>
@@ -122,28 +74,7 @@
 					<adc_channel_number>0</adc_channel_number>
 					<DirectoryRoot>Continuous</DirectoryRoot>
 					<IsSynoptic>0</IsSynoptic>
-					<Duration>900</Duration>
-				</PostProcessor>
-			</PostProcessorSequence>
-			<PostProcessorSequence>
-				<PostProcessor module="MatFileWriter">
-					<adc_channel_number>0</adc_channel_number>
-					<DirectoryRoot>Synoptic</DirectoryRoot>
-					<IsSynoptic>1</IsSynoptic>
-					<SynopticPeriod>3600</SynopticPeriod>
-					<Duration>60</Duration>
-				</PostProcessor>
-			</PostProcessorSequence>
-			<PostProcessorSequence>
-				<PostProcessor module="Narrowband">
-					<adc_channel_number>0</adc_channel_number>
-					<DirectoryRoot>Narrowband</DirectoryRoot>
-					<do_sph_chan>1</do_sph_chan>
-					<do_low_res>1</do_low_res>
-					<Duration>86400</Duration>
-					<call_sign>NLK,NAA,NML,WSMR</call_sign>
-					<call_sign_file>nb.conf</call_sign_file>
-					<filter_taps>filter_taps.txt</filter_taps>
+					<Duration>300</Duration>
 				</PostProcessor>
 			</PostProcessorSequence>
 			<PostProcessorSequence>
@@ -152,10 +83,10 @@
 					<DirectoryRoot>Spectrogram</DirectoryRoot>
 					<Duration>10</Duration>
 					<Period>1800</Period>
-					<NFFT>1024</NFFT>
-					<fmax>40</fmax>
+					<NFFT>16384</NFFT>
+					<fmax>400</fmax>
 					<cmin>-50</cmin>
-					<cmax>40</cmax>
+					<cmax>10</cmax>
 					<remove_hum>0</remove_hum>
 					<f0>60</f0>
 					<hum_fc>4000</hum_fc>
@@ -170,28 +101,7 @@
 					<adc_channel_number>1</adc_channel_number>
 					<DirectoryRoot>Continuous</DirectoryRoot>
 					<IsSynoptic>0</IsSynoptic>
-					<Duration>900</Duration>
-				</PostProcessor>
-			</PostProcessorSequence>
-			<PostProcessorSequence>
-				<PostProcessor module="MatFileWriter">
-					<adc_channel_number>1</adc_channel_number>
-					<DirectoryRoot>Synoptic</DirectoryRoot>
-					<IsSynoptic>1</IsSynoptic>
-					<SynopticPeriod>3600</SynopticPeriod>
-					<Duration>60</Duration>
-				</PostProcessor>
-			</PostProcessorSequence>
-			<PostProcessorSequence>
-				<PostProcessor module="Narrowband">
-					<adc_channel_number>1</adc_channel_number>
-					<DirectoryRoot>Narrowband</DirectoryRoot>
-					<do_sph_chan>1</do_sph_chan>
-					<do_low_res>1</do_low_res>
-					<Duration>86400</Duration>
-					<call_sign>NLK,NAA,NML,WSMR</call_sign>
-					<call_sign_file>nb.conf</call_sign_file>
-					<filter_taps>filter_taps.txt</filter_taps>
+					<Duration>300</Duration>
 				</PostProcessor>
 			</PostProcessorSequence>
 			<PostProcessorSequence>
@@ -200,10 +110,10 @@
 					<DirectoryRoot>Spectrogram</DirectoryRoot>
 					<Duration>10</Duration>
 					<Period>1800</Period>
-					<NFFT>1024</NFFT>
-					<fmax>40</fmax>
+					<NFFT>16384</NFFT>
+					<fmax>400</fmax>
 					<cmin>-50</cmin>
-					<cmax>40</cmax>
+					<cmax>10</cmax>
 					<remove_hum>0</remove_hum>
 					<f0>60</f0>
 					<hum_fc>4000</hum_fc>

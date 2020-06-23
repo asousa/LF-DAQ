@@ -6,17 +6,16 @@ import os.path
 from optparse import OptionParser
 from xml.dom.minidom import parse
 import numpy as np
-
-from utilities.DAQConfig import DAQConfig
-# from Engine import Engine
-from PostProcessorTree import PostProcessorTree
-from PostProcessors.Narrowband import Narrowband
-from PostProcessors.NarrowbandC import NarrowbandC
-
+import time
 from datetime import datetime, timedelta
 
-from utilities.DAQLogger import DAQLogger, DAQLogClient
+import Tkinter
+import tkFileDialog
+
+from PostProcessorTree import PostProcessorTree
+
 from utilities.DAQConfig import DAQConfig
+from utilities.DAQLogger import DAQLogger, DAQLogClient
 from utilities.loadMATdata import loadMATdata
 
 import time
@@ -95,18 +94,18 @@ class Engine:
                 print('sample rate is ',s['Fs'])
 
 
-            L = 1   #[seconds]
+            L = 1   #[seconds]  -- The code will probably handle longer strides,
+                    #              but MatFileWriter.py will start new files at each break over 1 sec.               
             fs = int(s['Fs'])
             logger.info("file length is %d seconds"%(len(s['data'])/s['Fs']))
-            # t = np.arange(int(L*fs),dtype=np.float)/fs
 
             sec_in_file = len(s['data'])/s['Fs']
             n_strides = int(sec_in_file/L)
 
             stride_length = int(s['Fs']*L)
 
-            logger.info("n_strides: %d"%n_strides)
-            logger.info("stride_length: %d"%stride_length)
+            logger.debug("n_strides: %d"%n_strides)
+            logger.debug("stride_length: %d"%stride_length)
 
             lat = s['latitude']
             lon = s['longitude']
@@ -115,8 +114,8 @@ class Engine:
             timestamp = datetime(year=int(s['start_year']), month=int(s['start_month']), day=int(s['start_day']),
                 hour=int(s['start_hour']), minute=int(s['start_minute']), second=int(s['start_second']))
 
-            logger.info("time = %s"%timestamp)
-            logger.info("data has shape %s"%np.shape(s['data']))
+            logger.debug("time = %s"%timestamp)
+            logger.debug("data has shape %s"%np.shape(s['data']))
 
             for i in xrange(n_strides):
                         # for i in xrange(n_strides):
@@ -127,13 +126,15 @@ class Engine:
                 # rawBuffer = s['data'][left:right].transpose().astype('float32')
                 rawBuffer = [x['data'][left:right].transpose().astype('float32') for x in s_list]
 
-        #        data = [[chNData], [dt,[lat,lon,alt],[quality]], sampleRate]
+                # Data message is in the following format:
+                # [[raw data], [gps timestamp, [lat, lon, alt], [gps quality]], sample rate]
                 data = [rawBuffer, [timestamp, [lat, lon, alt], [Q]], fs]
 
-                # logger.info("Processing for timestamp %s." % data[1][0])
+                # Queue it up!
                 self.ppt.Process(data)
                 timestamp += timedelta(seconds=L)
 
+            # Wait until the processing queues are empty before loading another file in
             qstat = self.get_queue_status()
             logger.info("Queue status: %s"%(qstat))
 
@@ -171,7 +172,7 @@ if __name__=="__main__":
                       help="Start daq acquisition without further input (default %default)")
     parser.add_option('--debug', dest="debug_on", default=False, action="store_true",
                       help="Start daq acquisition with debug mode turned on")
-    parser.add_option('--in_dir', '--in','--input','--inp_dir', dest="inp_dir", default="Continuous",type="string",
+    parser.add_option('--in_dir', '--in','--input','--inp_dir', dest="inp_dir", default=None,type="string",
                       help="The input directory of Continuous files to post-process. Default: %default")
 
     (options,args) = parser.parse_args()
@@ -211,31 +212,35 @@ if __name__=="__main__":
     logger.debug("Main logger ready.")
 
 
+    # Figure out our input directory. If None, ask for one with a dialog
     inp_dir = options.inp_dir
 
-    logger.status("Input directory:\t %s"%inp_dir)
-
-    # ------- Engine version (using the whole PostProcessor tree) -----
-    # # Start it!
-    eng = Engine(options, args, main_logger.log_queue)
-
+    if not inp_dir:
+        root = Tkinter.Tk()
+        root.withdraw()
+        logger.info('Please select an input directory')
+        inp_dir = tkFileDialog.askdirectory(title="Please select an input directory")
 
     if not os.path.isdir(inp_dir):
-        logger.warning("Invalid input directory: %s"%inp_dir)
-        engine.stop()
-    else:
+        sys.exit("Invalid input directory: %s"%inp_dir)
+   
+    logger.info("Processing from input directory: %s"%inp_dir)
+    
+    # ------- Engine version (using the whole PostProcessor tree) -----
+    eng = Engine(options, args, main_logger.log_queue)
 
-        # Find file prefixes to do:
-        d = os.listdir(inp_dir)
-        fnames = np.unique([x[:-8] for x in d if x.endswith('.mat')])
-        prefixes = sorted([os.path.join(inp_dir, x) for x in fnames])
-        
-        # Run them!
-        eng.process_files(prefixes)
+    # Find file prefixes to do:
+    d = os.listdir(inp_dir)
+    fnames = np.unique([x.split('_')[0] for x in d if x.endswith('.mat')])
+    prefixes = sorted([os.path.join(inp_dir, x) for x in fnames])
+    
+    # Run them!
+    eng.process_files(prefixes)
 
-        # Stop and start the engine, to finish the last .MAU files
-        eng.stop()
-        eng.start()
-        eng.stop()
+    # Stop and start the engine, to finish the last .MAU files
+    eng.stop()
+    eng.start()
+    eng.stop()
 
-        logger.status("Finished processing files in %s"%inp_dir)
+    logger.status("Finished processing files in %s"%inp_dir)
+

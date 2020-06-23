@@ -159,7 +159,9 @@ class NarrowbandC:
         del tmpmat
 
         # self.queue = Queue(60)
-        self.queue = Queue(3600)   # 6-19-2020 APS -- working on offline version
+        self.queue = Queue(1800)   # 6-19-2020 APS -- working on offline version
+                                   # 1800 = narrowband can be a full 30 minutes behind
+                                   # (Useful when loading in previously-recorded continuous files)
 
         self._RECOVER_TIME = 30
         self.recover_count = 0   #if queue full, allow some time to recover before trying to place more data
