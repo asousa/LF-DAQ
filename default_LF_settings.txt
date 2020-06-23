@@ -72,7 +72,7 @@ active=1
 
 #External drive path (if active)
 #This can be a comma-separated list of drives
-external_drive=D:\,E:\
+external_drive=D:\,E:\,F:\
 
 #--------------
 [BBFileWriters]

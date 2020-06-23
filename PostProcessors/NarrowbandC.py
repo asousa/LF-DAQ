@@ -158,7 +158,9 @@ class NarrowbandC:
         tmpmat = matf.MatFileWriter(config, logger)
         del tmpmat
 
-        self.queue = Queue(60)
+        # self.queue = Queue(60)
+        self.queue = Queue(3600)   # 6-19-2020 APS -- working on offline version
+
         self._RECOVER_TIME = 30
         self.recover_count = 0   #if queue full, allow some time to recover before trying to place more data
         self.startNBProcess(nb_input,config)

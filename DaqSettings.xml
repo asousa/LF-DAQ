@@ -1,9 +1,9 @@
-<!-- Settings generated at 2020-05-22 20:31:18.194000 [UTC] by settings_generator -->
+<!-- Settings generated at 2020-06-19 21:34:19.347000 [UTC] by settings_generator -->
 
 <DaqConfiguration>
 	<StationSettings>
-		<station_id>XX</station_id>
-		<station_name>site_name</station_name>
+		<station_id>MM</station_id>
+		<station_name>Bob's House</station_name>
 		<IsLF>0</IsLF>
 		<IsResettable>0</IsResettable>
 		<station_description>CU VLF Receiver</station_description>
@@ -64,6 +64,46 @@
 			<DataLifetime>5</DataLifetime>
 		</Task>
 		<Task module="CopyFiles">
+			<Directory>Continuous</Directory>
+			<Interval>1800</Interval>
+			<Delete>1</Delete>
+			<StartTime>00:00</StartTime>
+			<EndTime>23:59</EndTime>
+			<WriteDirectory0>D:\Continuous</WriteDirectory0>
+			<WriteDirectory1>E:\Continuous</WriteDirectory1>
+			<WriteDirectory2>F:\Continuous</WriteDirectory2>
+		</Task>
+		<Task module="CopyFiles">
+			<Directory>Synoptic</Directory>
+			<Interval>1800</Interval>
+			<Delete>1</Delete>
+			<StartTime>00:00</StartTime>
+			<EndTime>23:59</EndTime>
+			<WriteDirectory0>D:\Synoptic</WriteDirectory0>
+			<WriteDirectory1>E:\Synoptic</WriteDirectory1>
+			<WriteDirectory2>F:\Synoptic</WriteDirectory2>
+		</Task>
+		<Task module="CopyFiles">
+			<Directory>Spectrogram</Directory>
+			<Interval>1800</Interval>
+			<Delete>1</Delete>
+			<StartTime>00:00</StartTime>
+			<EndTime>23:59</EndTime>
+			<WriteDirectory0>D:\Spectrogram</WriteDirectory0>
+			<WriteDirectory1>E:\Spectrogram</WriteDirectory1>
+			<WriteDirectory2>F:\Spectrogram</WriteDirectory2>
+		</Task>
+		<Task module="CopyFiles">
+			<Directory>Narrowband</Directory>
+			<Interval>1800</Interval>
+			<Delete>1</Delete>
+			<StartTime>00:00</StartTime>
+			<EndTime>23:59</EndTime>
+			<WriteDirectory0>D:\Narrowband</WriteDirectory0>
+			<WriteDirectory1>E:\Narrowband</WriteDirectory1>
+			<WriteDirectory2>F:\Narrowband</WriteDirectory2>
+		</Task>
+		<Task module="CopyFiles">
 			<Filename>DaqSettings.xml</Filename>
 			<Filename0>default_LF_settings.txt</Filename0>
 			<Filename1>default_VLF_settings.txt</Filename1>
@@ -101,7 +141,7 @@
 					<do_sph_chan>1</do_sph_chan>
 					<do_low_res>1</do_low_res>
 					<Duration>86400</Duration>
-					<call_sign>NLK,NAA,NML</call_sign>
+					<call_sign>NLK,NAA,NML,WSMR</call_sign>
 					<call_sign_file>nb.conf</call_sign_file>
 					<filter_taps>filter_taps.txt</filter_taps>
 				</PostProcessor>
@@ -149,7 +189,7 @@
 					<do_sph_chan>1</do_sph_chan>
 					<do_low_res>1</do_low_res>
 					<Duration>86400</Duration>
-					<call_sign>NLK,NAA,NML</call_sign>
+					<call_sign>NLK,NAA,NML,WSMR</call_sign>
 					<call_sign_file>nb.conf</call_sign_file>
 					<filter_taps>filter_taps.txt</filter_taps>
 				</PostProcessor>
@@ -189,7 +229,7 @@
 		<LogPostUrl>/field_sites_logs/logging.php</LogPostUrl>
 		<LogPostServer>vlf-engineering.stanford.edu:80</LogPostServer>
 		<ConsoleLevel>TIMESTAMP</ConsoleLevel>
-		<LogFileLevel>DEBUG</LogFileLevel>
+		<LogFileLevel>TIMESTAMP</LogFileLevel>
 		<PostLevel>WARNING</PostLevel>
 	</Logger>
 	<timing_limits>

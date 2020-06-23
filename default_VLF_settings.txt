@@ -2,8 +2,8 @@
 #------
 [Basics]
 #------
-station_id=XX
-station_name=site_name
+station_id=MM
+station_name=Bob's House
 NumChannels=2
 
 #DAQ card
@@ -70,11 +70,11 @@ cleanup_spec_days=5
 #-----------------
 [Copy_To_External]
 #-----------------
-active==1
+active=1
 
 #External drive path (if active)
 #This can be a comma-separated list of drives
-external_drive=D:\,E:\
+external_drive=D:\,E:\,F:\
 
 #--------------
 [BBFileWriters]
