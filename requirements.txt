@@ -4,7 +4,7 @@ pyserial==3.4
 scipy==1.0.0
 wxpython==4.0.1
 matplotlib==2.1.2
-paramiko==2.7.1
+paramiko==2.10.1
 poster==0.8.1
 cx-freeze==5.1.1
 psutil==5.7.0
